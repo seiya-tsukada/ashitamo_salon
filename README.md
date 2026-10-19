@@ -1,0 +1,1 @@
+# ashitamo_salon
