@@ -1,0 +1,6 @@
+{
+  "name": "CREATIVE LAB - 温かな共創オンラインサロンMVP",
+  "description": "「ただの観客で終わるな。仕掛け人になれ。」温かな仲間とともに新しい熱狂を仕掛ける自社構築オンラインサロンMVP。LP、プロジェクトタイムライン、企画詳細・提案スレッド、/admin配下の運営管理ダッシュボードを完備。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
