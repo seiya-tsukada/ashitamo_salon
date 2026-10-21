@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { PageType, ProjectItem, CommentItem, MemberItem, ReportItem } from './types';
 import { INITIAL_PROJECTS, MOCK_MEMBERS, MOCK_REPORTS } from './data/mockData';
 import { Navbar } from './components/Navbar';
@@ -6,6 +6,9 @@ import { LPView } from './components/LPView';
 import { HomeView } from './components/HomeView';
 import { DetailView } from './components/DetailView';
 import { AdminView } from './components/AdminView';
+import { SignupModal } from './components/SignupModal';
+
+const MEMBER_STORAGE_KEY = 'ashitamo:isMember';
 
 export default function App() {
   // Initialize current page based on browser path (/admin -> 'admin')
@@ -27,6 +30,16 @@ export default function App() {
   const [projects, setProjects] = useState<ProjectItem[]>(INITIAL_PROJECTS);
   const [members, setMembers] = useState<MemberItem[]>(MOCK_MEMBERS);
   const [reports, setReports] = useState<ReportItem[]>(MOCK_REPORTS);
+
+  // Mock membership flag (persisted per browser so the signup modal is shown only once)
+  const [isMember, setIsMember] = useState<boolean>(() => {
+    try {
+      return window.localStorage.getItem(MEMBER_STORAGE_KEY) === 'true';
+    } catch {
+      return false;
+    }
+  });
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
 
   // Sync with browser back/forward buttons (popstate)
   useEffect(() => {
@@ -69,6 +82,34 @@ export default function App() {
         console.warn('History pushState fallback:', err);
       }
     }
+  };
+
+  // Entry point to the salon: members go straight in, others sign up first
+  const handleEnterSalon = () => {
+    if (isMember) {
+      handleNavigate('home');
+    } else {
+      setIsSignupOpen(true);
+    }
+  };
+
+  // Stable reference so the modal's Escape/scroll-lock effect doesn't re-run on every render
+  const handleSignupClose = useCallback(() => setIsSignupOpen(false), []);
+
+  const handleSignupComplete = () => {
+    setIsMember(true);
+    try {
+      window.localStorage.setItem(MEMBER_STORAGE_KEY, 'true');
+    } catch {
+      // Storage unavailable: membership lasts for this session only
+    }
+    setIsSignupOpen(false);
+    handleNavigate('home');
+  };
+
+  const handleSignupSkip = () => {
+    setIsSignupOpen(false);
+    handleNavigate('home');
   };
 
   const handleSelectProject = (projectId: string) => {
@@ -123,12 +164,12 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-stone-800 flex flex-col font-sans selection:bg-amber-200 selection:text-stone-900">
       {/* Top Navbar */}
-      <Navbar currentPage={currentPage} onNavigate={handleNavigate} />
+      <Navbar currentPage={currentPage} onNavigate={handleNavigate} onEnterSalon={handleEnterSalon} />
 
       {/* Main Page View router */}
       <main className="flex-1">
         {currentPage === 'lp' && (
-          <LPView onNavigate={handleNavigate} />
+          <LPView onNavigate={handleNavigate} onEnterSalon={handleEnterSalon} />
         )}
 
         {currentPage === 'home' && (
@@ -159,6 +200,14 @@ export default function App() {
           />
         )}
       </main>
+
+      {isSignupOpen && (
+        <SignupModal
+          onClose={handleSignupClose}
+          onComplete={handleSignupComplete}
+          onSkip={handleSignupSkip}
+        />
+      )}
     </div>
   );
 }

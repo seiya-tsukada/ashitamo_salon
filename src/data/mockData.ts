@@ -210,7 +210,7 @@ export const MOCK_MEMBERS: MemberItem[] = [
     joinedAt: '2026/01/15',
     activeProjects: 3,
     status: 'アクティブ',
-    monthlyPlan: '月額 3,000円'
+    monthlyPlan: '月額 1,000円'
   },
   {
     id: 'MEM-002',
@@ -221,7 +221,7 @@ export const MOCK_MEMBERS: MemberItem[] = [
     joinedAt: '2026/02/01',
     activeProjects: 2,
     status: 'アクティブ',
-    monthlyPlan: '月額 3,000円'
+    monthlyPlan: '月額 1,000円'
   },
   {
     id: 'MEM-003',
@@ -232,7 +232,7 @@ export const MOCK_MEMBERS: MemberItem[] = [
     joinedAt: '2026/03/10',
     activeProjects: 1,
     status: '決済エラー',
-    monthlyPlan: '月額 3,000円'
+    monthlyPlan: '月額 1,000円'
   },
   {
     id: 'MEM-004',
@@ -243,7 +243,7 @@ export const MOCK_MEMBERS: MemberItem[] = [
     joinedAt: '2026/04/05',
     activeProjects: 0,
     status: '休会中',
-    monthlyPlan: '月額 3,000円'
+    monthlyPlan: '月額 1,000円'
   },
   {
     id: 'MEM-005',
@@ -254,7 +254,7 @@ export const MOCK_MEMBERS: MemberItem[] = [
     joinedAt: '2026/10/16',
     activeProjects: 1,
     status: '新規',
-    monthlyPlan: '月額 3,000円'
+    monthlyPlan: '月額 1,000円'
   },
   {
     id: 'MEM-006',
@@ -265,7 +265,7 @@ export const MOCK_MEMBERS: MemberItem[] = [
     joinedAt: '2026/02/18',
     activeProjects: 2,
     status: 'アクティブ',
-    monthlyPlan: '月額 3,000円'
+    monthlyPlan: '月額 1,000円'
   }
 ];
 

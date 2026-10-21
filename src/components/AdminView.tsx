@@ -145,7 +145,7 @@ export const AdminView: React.FC<AdminViewProps> = ({
               <DollarSign className="w-4 h-4 text-amber-600" />
             </div>
             <div className="text-3xl font-extrabold text-stone-900 font-mono tabular-nums">
-              ¥4,284,000
+              ¥1,428,000
             </div>
             <div className="mt-3 text-xs text-stone-500">
               決済成功率 <span className="text-stone-800 font-bold font-mono">98.2%</span>

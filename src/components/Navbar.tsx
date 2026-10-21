@@ -5,9 +5,10 @@ import { LayoutDashboard, Sparkles, Shield, ArrowLeft } from 'lucide-react';
 interface NavbarProps {
   currentPage: PageType;
   onNavigate: (page: PageType) => void;
+  onEnterSalon: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
+export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onEnterSalon }) => {
   return (
     <header className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-stone-200/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
@@ -20,8 +21,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center font-black text-white text-base shadow-sm group-hover:scale-105 transition-transform">
               ア
             </div>
-            <div className="flex flex-col">
-              <span className="font-extrabold text-base tracking-tight text-stone-900 group-hover:text-orange-600 transition-colors">
+            <div className="hidden sm:flex flex-col">
+              <span className="font-extrabold text-base tracking-tight whitespace-nowrap text-stone-900 group-hover:text-orange-600 transition-colors">
                 アシタモハレルヤ
               </span>
               <span className="text-[10px] font-mono text-stone-500 tracking-wider -mt-1 hidden sm:block">
@@ -40,10 +41,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
         {/* Zone 2: Navigation Links / View Switchers */}
         <nav className="flex items-center gap-1 sm:gap-2">
           {/* Quick Page View Switcher */}
-          <div className="flex items-center p-1 bg-stone-100 border border-stone-200 rounded-xl text-xs">
+          <div className="flex items-center p-1 bg-stone-100 border border-stone-200 rounded-xl text-xs whitespace-nowrap">
             <button
               onClick={() => onNavigate('lp')}
-              className={`px-3 py-1 rounded-lg font-medium transition-colors cursor-pointer ${
+              className={`px-2 sm:px-3 py-1 rounded-lg font-medium transition-colors cursor-pointer ${
                 currentPage === 'lp'
                   ? 'bg-white text-stone-900 font-bold shadow-xs'
                   : 'text-stone-600 hover:text-stone-900'
@@ -52,8 +53,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
               LP
             </button>
             <button
-              onClick={() => onNavigate('home')}
-              className={`px-3 py-1 rounded-lg font-medium transition-colors cursor-pointer ${
+              onClick={onEnterSalon}
+              className={`px-2 sm:px-3 py-1 rounded-lg font-medium transition-colors cursor-pointer ${
                 currentPage === 'home' || currentPage === 'detail'
                   ? 'bg-white text-stone-900 font-bold shadow-xs'
                   : 'text-stone-600 hover:text-stone-900'
@@ -63,7 +64,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
             </button>
             <button
               onClick={() => onNavigate('admin')}
-              className={`px-3 py-1 rounded-lg font-medium transition-colors cursor-pointer flex items-center gap-1 ${
+              className={`px-2 sm:px-3 py-1 rounded-lg font-medium transition-colors cursor-pointer flex items-center gap-1 ${
                 currentPage === 'admin'
                   ? 'bg-white text-amber-900 font-bold shadow-xs'
                   : 'text-stone-600 hover:text-stone-900'
@@ -78,8 +79,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
         <div className="flex items-center gap-3">
           {currentPage === 'lp' ? (
             <button
-              onClick={() => onNavigate('home')}
-              className="px-4 py-2 text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 rounded-lg shadow-sm transition-all cursor-pointer whitespace-nowrap"
+              onClick={onEnterSalon}
+              className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 rounded-lg shadow-sm transition-all cursor-pointer whitespace-nowrap"
             >
               サロンに入る
             </button>
