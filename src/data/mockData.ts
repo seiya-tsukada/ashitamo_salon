@@ -8,7 +8,7 @@ export const INITIAL_PROJECTS: ProjectItem[] = [
     lead: '「手元に残したくなる本を、みんなの熱量で」— 商業出版の枠組みを越え、完全自社流通・クラファン連動で仕掛ける120ページの本格カルチャー誌。執筆者、レイアウトデザイナー、校正、PR担当を募集します。',
     author: {
       name: '箕崎 駿（Shun Misaki）',
-      role: 'CREATIVE LAB 主宰 / 編集長',
+      role: 'アシタモハレルヤ 主宰 / 編集長',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
     },
     publishedAt: '2時間前',
@@ -16,7 +16,7 @@ export const INITIAL_PROJECTS: ProjectItem[] = [
     targetSlots: 6,
     currentMembers: 4,
     tags: ['出版企画', 'デザイン', '編集', 'クラファン連動'],
-    bannerImage: '/src/assets/images/warm_publishing_lab_1792395805210.jpg',
+    bannerImage: '/images/warm_publishing_lab_1792395805210.jpg',
     fullContent: {
       background: 'デジタル全盛の時代だからこそ、「手元に残したい究極の1冊」をみんなで創る価値がある。既存の大手取次や書店流通のルールに縛られず、サロンメンバー自らが取材し、執筆し、デザインし、印刷立ち会いまで行う実験的出版プロジェクトです。初版部数は限定3,000部。すでに先行クラファンで1,200万円の支援を獲得しています。',
       purpose: '単なる情報伝達ではなく、手に取った読者が「自分も表現者になりたい」と温かな勇気を覚えるような媒体を世に放つこと。',
@@ -48,7 +48,7 @@ export const INITIAL_PROJECTS: ProjectItem[] = [
       {
         id: 'c-2',
         author: '箕崎 駿（Shun Misaki）',
-        authorRole: 'CREATIVE LAB 主宰 / 編集長',
+        authorRole: 'アシタモハレルヤ 主宰 / 編集長',
         authorAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
         content: '神谷さん、ありがとうございます！温かみのある紙の風合い、まさにこの本にぴったりです。今週木曜21:00の第1回オンライン編集会議でお話ししましょう。枠確保します！',
         createdAt: '45分前',
@@ -80,7 +80,7 @@ export const INITIAL_PROJECTS: ProjectItem[] = [
     targetSlots: 5,
     currentMembers: 3,
     tags: ['ハードウェア', '工業デザイン', '3Dプリンタ', 'IoT'],
-    bannerImage: '/src/assets/images/warm_product_design_1792395807048.jpg',
+    bannerImage: '/images/warm_product_design_1792395807048.jpg',
     fullContent: {
       background: '手で触れる「心地よい質感」と「重み」を持つガジェットが日々のクリエイティビティを支える。木目や陶器のような自然な手触りと、精密な操作感を両立したクリエイター専用の触覚インターフェースを開発しています。',
       purpose: '量産試作ライン立ち上げ前の、最終プロトタイプ検証。Kickstarterでのグローバルローンチを視野に入れています。',
@@ -123,7 +123,7 @@ export const INITIAL_PROJECTS: ProjectItem[] = [
     title: '【公式】熱狂の実験室『PARK FES 2026』空間演出・フードコラボ実行委員会',
     lead: '過疎地域の廃校を丸ごとリノベーションし、1泊2日で開催するサロン最大のリアルフェス。夕暮れのランタン演出、音楽ライブ、地元農家・酒蔵とコラボした限定クラフトバーの企画運営を牽引するコアメンバーを召集！',
     author: {
-      name: '運営事務局（CREATIVE LAB Core）',
+      name: '運営事務局（アシタモハレルヤ Core）',
       role: 'コミュニティマネージャー',
       avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
     },
@@ -132,7 +132,7 @@ export const INITIAL_PROJECTS: ProjectItem[] = [
     targetSlots: 10,
     currentMembers: 7,
     tags: ['リアルイベント', '地方創生', '空間デザイン', '飲食プロデュース'],
-    bannerImage: '/src/assets/images/warm_community_fest_1792395806083.jpg',
+    bannerImage: '/images/warm_community_fest_1792395806083.jpg',
     fullContent: {
       background: 'オンラインのつながりを、リアルなあたたかい「出会いと共創の現場」に昇華させる年間最大フェス。参加者全員が観客ではなく仲間であり表現者。地方自治体とタッグを組み、過疎化が進む地域の廃校を2日間限定のあたたかい文化祭へ変貌させます。',
       purpose: '地域の人々とサロンメンバーが笑顔で交わる新しい地方創生モデルを作り、息の長い関係性を育てること。',

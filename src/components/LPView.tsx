@@ -71,8 +71,8 @@ export const LPView: React.FC<LPViewProps> = ({ onNavigate }) => {
               <div className="relative rounded-2xl overflow-hidden border border-stone-200 bg-white p-2 shadow-xl shadow-stone-200/50 group">
                 <div className="rounded-xl overflow-hidden relative">
                   <img
-                    src="/src/assets/images/hero_heartful_creative_1792395804494.jpg"
-                    alt="CREATIVE LABのあたたかなメンバー共創風景"
+                    src="/images/hero_heartful_creative_1792395804494.jpg"
+                    alt="アシタモハレルヤのあたたかなメンバー共創風景"
                     className="w-full h-auto object-cover aspect-[4/3] sm:aspect-[16/11] transition-transform duration-700 group-hover:scale-105"
                     referrerPolicy="no-referrer"
                   />
@@ -142,7 +142,7 @@ export const LPView: React.FC<LPViewProps> = ({ onNavigate }) => {
               </h2>
             </div>
             <p className="text-sm text-stone-600 max-w-md leading-relaxed">
-              講義を聴くだけの受け身なサロンではありません。CREATIVE LABでは全員が温かな仲間として現場に入り、手を動かして世の中に優しい感動を届けます。
+              講義を聴くだけの受け身なサロンではありません。アシタモハレルヤでは全員が温かな仲間として現場に入り、手を動かして世の中に優しい感動を届けます。
             </p>
           </div>
 
@@ -151,7 +151,7 @@ export const LPView: React.FC<LPViewProps> = ({ onNavigate }) => {
             <div className="group rounded-2xl bg-white border border-stone-200/80 shadow-md shadow-stone-200/40 overflow-hidden flex flex-col transition-all duration-300 hover:shadow-xl hover:border-amber-300">
               <div className="relative aspect-[4/3] overflow-hidden bg-stone-100">
                 <img
-                  src="/src/assets/images/warm_publishing_lab_1792395805210.jpg"
+                  src="/images/warm_publishing_lab_1792395805210.jpg"
                   alt="温もりある雑誌・書籍編集プロジェクト"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   referrerPolicy="no-referrer"
@@ -180,7 +180,7 @@ export const LPView: React.FC<LPViewProps> = ({ onNavigate }) => {
             <div className="group rounded-2xl bg-white border border-stone-200/80 shadow-md shadow-stone-200/40 overflow-hidden flex flex-col transition-all duration-300 hover:shadow-xl hover:border-amber-300">
               <div className="relative aspect-[4/3] overflow-hidden bg-stone-100">
                 <img
-                  src="/src/assets/images/warm_product_design_1792395807048.jpg"
+                  src="/images/warm_product_design_1792395807048.jpg"
                   alt="ものづくり・プロダクト開発"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   referrerPolicy="no-referrer"
@@ -209,7 +209,7 @@ export const LPView: React.FC<LPViewProps> = ({ onNavigate }) => {
             <div className="group rounded-2xl bg-white border border-stone-200/80 shadow-md shadow-stone-200/40 overflow-hidden flex flex-col transition-all duration-300 hover:shadow-xl hover:border-amber-300">
               <div className="relative aspect-[4/3] overflow-hidden bg-stone-100">
                 <img
-                  src="/src/assets/images/warm_community_fest_1792395806083.jpg"
+                  src="/images/warm_community_fest_1792395806083.jpg"
                   alt="地方創生・あかりのリアルフェス"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   referrerPolicy="no-referrer"
@@ -246,7 +246,7 @@ export const LPView: React.FC<LPViewProps> = ({ onNavigate }) => {
             まずは気軽にお茶を飲むように、現場へ飛び込もう。”
           </blockquote>
           <p className="text-xs sm:text-sm text-amber-800 font-medium">
-            CREATIVE LAB コミュニティ・マニフェスト より
+            アシタモハレルヤ コミュニティ・マニフェスト より
           </p>
         </div>
       </section>
@@ -284,9 +284,9 @@ export const LPView: React.FC<LPViewProps> = ({ onNavigate }) => {
       <footer className="mt-auto py-8 border-t border-stone-200 bg-white text-stone-500 text-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <span className="font-bold text-stone-900 tracking-wider text-sm">CREATIVE LAB</span>
+            <span className="font-bold text-stone-900 tracking-wider text-sm">アシタモハレルヤ</span>
             <span className="text-stone-300">·</span>
-            <span>© 2026 CREATIVE LAB Inc. All rights reserved.</span>
+            <span>© 2026 アシタモハレルヤ All rights reserved.</span>
           </div>
 
           <div className="flex items-center gap-4">
