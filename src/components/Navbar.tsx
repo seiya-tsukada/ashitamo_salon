@@ -18,11 +18,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
             className="flex items-center gap-2.5 text-left group cursor-pointer"
           >
             <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center font-black text-white text-base shadow-sm group-hover:scale-105 transition-transform">
-              C
+              ア
             </div>
             <div className="flex flex-col">
               <span className="font-extrabold text-base tracking-tight text-stone-900 group-hover:text-orange-600 transition-colors">
-                CREATIVE LAB
+                アシタモハレルヤ
               </span>
               <span className="text-[10px] font-mono text-stone-500 tracking-wider -mt-1 hidden sm:block">
                 COMMUNITY SALON

@@ -103,7 +103,7 @@ export const AdminView: React.FC<AdminViewProps> = ({
               <div className="flex items-center gap-2 text-[11px] font-mono text-amber-800 font-bold uppercase tracking-wider">
                 <span className="px-1.5 py-0.5 rounded bg-amber-100 border border-amber-300">/admin</span>
                 <span className="text-stone-400">/</span>
-                <span>CREATIVE LAB CORE OPERATIONS</span>
+                <span>アシタモハレルヤ CORE OPERATIONS</span>
               </div>
               <h1 className="text-xl sm:text-2xl font-black text-stone-900 tracking-tight mt-0.5">
                 サロン運営管理ダッシュボード
