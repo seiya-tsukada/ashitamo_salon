@@ -4,12 +4,12 @@ import { INITIAL_PROJECTS, MOCK_MEMBERS, MOCK_REPORTS } from './data/mockData';
 import { DEFAULT_PROJECT_ID, PAGE_PATHS } from './constants/routes';
 import { MEMBER_STORAGE_KEY } from './constants/storage';
 import { resolvePageFromLocation } from './utils/routing';
-import { Navbar } from './components/Navbar';
-import { LPView } from './components/LPView';
-import { HomeView } from './components/HomeView';
-import { DetailView } from './components/DetailView';
-import { AdminView } from './components/AdminView';
-import { SignupModal } from './components/SignupModal';
+import { Navbar } from './components/layout/Navbar';
+import { LPView } from './components/lp/LPView';
+import { HomeView } from './components/home/HomeView';
+import { DetailView } from './components/detail/DetailView';
+import { AdminView } from './components/admin/AdminView';
+import { SignupModal } from './components/signup/SignupModal';
 
 export default function App() {
   // Initial page comes from the URL; /detail is not restored on first load (no project id yet)
@@ -136,7 +136,6 @@ export default function App() {
           <HomeView
             projects={projects}
             onSelectProject={handleSelectProject}
-            onNavigateToAdmin={() => handleNavigate('admin')}
             onCreateProject={handleCreateProject}
           />
         )}

@@ -1,9 +1,11 @@
 import React from 'react';
-import { ArrowRight, Sparkles } from 'lucide-react';
-import { PageType } from '../types';
-import { IMAGES } from '../constants/images';
-import { SITE_NAME, COPYRIGHT_YEAR } from '../constants/site';
-import { LP_ACTIVITIES } from '../data/lpActivities';
+import { Sparkles } from 'lucide-react';
+import { PageType } from '../../types';
+import { IMAGES } from '../../constants/images';
+import { SITE_NAME, COPYRIGHT_YEAR } from '../../constants/site';
+import { LP_ACTIVITIES } from '../../data/lpActivities';
+import { Button, ButtonArrow } from '../ui/Button';
+import { ActivityCard } from './ActivityCard';
 
 interface LPViewProps {
   onNavigate: (page: PageType) => void;
@@ -42,13 +44,10 @@ export const LPView: React.FC<LPViewProps> = ({ onNavigate, onEnterSalon }) => {
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-4">
-            <button
-              onClick={onEnterSalon}
-              className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-white text-stone-900 text-sm sm:text-base font-bold hover:bg-amber-50 transition-colors cursor-pointer"
-            >
+            <Button variant="light" onClick={onEnterSalon} className="group px-8 py-4 text-sm sm:text-base">
               サロンに参加する
-              <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
-            </button>
+              <ButtonArrow />
+            </Button>
             <a
               href="#activities"
               className="inline-flex items-center justify-center px-8 py-4 rounded-full border border-white/40 text-white text-sm sm:text-base font-semibold hover:bg-white/10 transition-colors"
@@ -80,34 +79,7 @@ export const LPView: React.FC<LPViewProps> = ({ onNavigate, onEnterSalon }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {LP_ACTIVITIES.map((activity) => (
-              <div
-                key={activity.label}
-                className="group rounded-2xl bg-white border border-stone-200/80 shadow-md shadow-stone-200/40 overflow-hidden flex flex-col transition-all duration-300 hover:shadow-xl hover:border-amber-300"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden bg-stone-100">
-                  <img
-                    src={activity.image}
-                    alt={activity.imageAlt}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded bg-white/90 border border-stone-200 text-[11px] font-mono font-bold text-amber-800 backdrop-blur-sm shadow-xs">
-                    {activity.label}
-                  </div>
-                </div>
-                <div className="p-6 flex-1 flex flex-col justify-between">
-                  <div>
-                    <h3 className="text-xl font-bold text-stone-900 group-hover:text-orange-600 transition-colors">
-                      {activity.title}
-                    </h3>
-                    <p className="mt-3 text-sm text-stone-600 leading-relaxed">{activity.description}</p>
-                  </div>
-                  <div className="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500">
-                    <span>進行中プロジェクト</span>
-                    <span className="font-semibold text-stone-800">{activity.currentProject}</span>
-                  </div>
-                </div>
-              </div>
+              <ActivityCard key={activity.label} activity={activity} />
             ))}
           </div>
         </div>
@@ -127,13 +99,10 @@ export const LPView: React.FC<LPViewProps> = ({ onNavigate, onEnterSalon }) => {
           </h2>
 
           <div className="mt-12 flex justify-center">
-            <button
-              onClick={onEnterSalon}
-              className="group inline-flex items-center justify-center gap-3 px-10 py-4 rounded-full bg-white text-stone-900 text-sm sm:text-base font-bold hover:bg-amber-50 transition-colors cursor-pointer"
-            >
+            <Button variant="light" onClick={onEnterSalon} className="group px-10 py-4 text-sm sm:text-base">
               サロンに参加する
-              <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
-            </button>
+              <ButtonArrow />
+            </Button>
           </div>
         </div>
       </section>

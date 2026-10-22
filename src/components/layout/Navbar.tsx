@@ -1,8 +1,9 @@
 import React from 'react';
-import { PageType } from '../types';
+import { PageType } from '../../types';
 import { LayoutDashboard } from 'lucide-react';
-import { SITE_NAME, SITE_SUBTITLE } from '../constants/site';
-import { CURRENT_USER } from '../constants/currentUser';
+import { SITE_NAME, SITE_SUBTITLE } from '../../constants/site';
+import { CURRENT_USER } from '../../constants/currentUser';
+import { Button } from '../ui/Button';
 
 interface NavbarProps {
   currentPage: PageType;
@@ -79,12 +80,13 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onEnter
         {/* Right side: CTA on LP, user info elsewhere */}
         <div className="flex items-center gap-3">
           {currentPage === 'lp' ? (
-            <button
+            <Button
+              variant="gradient"
               onClick={onEnterSalon}
-              className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 rounded-lg shadow-sm transition-all cursor-pointer whitespace-nowrap"
+              className="px-3 sm:px-4 py-2 text-xs sm:text-sm rounded-lg shadow-sm whitespace-nowrap"
             >
               サロンに入る
-            </button>
+            </Button>
           ) : (
             <div className="flex items-center gap-3">
               <button
