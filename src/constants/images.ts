@@ -1,6 +1,6 @@
 export const IMAGES = {
-  hero: '/images/hero_heartful_creative_1792395804494.jpg',
-  publishing: '/images/warm_publishing_lab_1792395805210.jpg',
-  product: '/images/warm_product_design_1792395807048.jpg',
-  festival: '/images/warm_community_fest_1792395806083.jpg',
+  hero: '/images/hero_heartful_creative.webp',
+  publishing: '/images/warm_publishing_lab.webp',
+  product: '/images/warm_product_design.webp',
+  festival: '/images/warm_community_fest.webp',
 } as const;
