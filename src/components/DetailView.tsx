@@ -1,17 +1,8 @@
 import React, { useState } from 'react';
 import { ProjectItem, CommentItem } from '../types';
-import { 
-  ArrowLeft, 
-  Send, 
-  Heart, 
-  Clock, 
-  Users, 
-  Calendar, 
-  CheckCircle2, 
-  Sparkles, 
-  Share2,
-  Check
-} from 'lucide-react';
+import { ArrowLeft, Send, Heart, Users, Check } from 'lucide-react';
+import { COMMENT_ROLE_OPTIONS, CURRENT_USER, DEFAULT_COMMENT_ROLE } from '../constants/currentUser';
+import { JUST_NOW_LABEL, roleApplicationMessage } from '../constants/project';
 
 interface DetailViewProps {
   project: ProjectItem;
@@ -25,7 +16,7 @@ export const DetailView: React.FC<DetailViewProps> = ({
   onAddComment,
 }) => {
   const [commentText, setCommentText] = useState('');
-  const [userRoleSelection, setUserRoleSelection] = useState('デザイナー / エンジニア');
+  const [userRoleSelection, setUserRoleSelection] = useState(DEFAULT_COMMENT_ROLE);
   const [appliedRoles, setAppliedRoles] = useState<string[]>([]);
   const [likedComments, setLikedComments] = useState<Record<string, boolean>>({});
 
@@ -35,11 +26,11 @@ export const DetailView: React.FC<DetailViewProps> = ({
 
     const newComment: CommentItem = {
       id: `c-user-${Date.now()}`,
-      author: '佐藤 匠（Takumi Sato）',
+      author: CURRENT_USER.name,
       authorRole: userRoleSelection,
-      authorAvatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+      authorAvatar: CURRENT_USER.avatar,
       content: commentText.trim(),
-      createdAt: 'たった今',
+      createdAt: JUST_NOW_LABEL,
       likes: 1,
     };
 
@@ -50,14 +41,14 @@ export const DetailView: React.FC<DetailViewProps> = ({
   const handleApplyRole = (roleName: string) => {
     if (appliedRoles.includes(roleName)) return;
     setAppliedRoles([...appliedRoles, roleName]);
-    // Also add an automated proposal comment
+    // Applying also posts an announcement to the thread
     const applicationComment: CommentItem = {
       id: `c-apply-${Date.now()}`,
-      author: '佐藤 匠（Takumi Sato）',
+      author: CURRENT_USER.name,
       authorRole: roleName,
-      authorAvatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
-      content: `【立候補】「${roleName}」の役割に立候補しました！チームのみなさんと温かく協力しながら、最高のアウトプットを目指したいです。よろしくお願いします！`,
-      createdAt: 'たった今',
+      authorAvatar: CURRENT_USER.avatar,
+      content: roleApplicationMessage(roleName),
+      createdAt: JUST_NOW_LABEL,
       likes: 2,
     };
     onAddComment(project.id, applicationComment);
@@ -72,7 +63,7 @@ export const DetailView: React.FC<DetailViewProps> = ({
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-stone-800 pb-24">
-      {/* Top Navigation & Back Action */}
+      {/* Sticky back bar */}
       <div className="bg-white/90 border-b border-stone-200/80 sticky top-16 z-30 backdrop-blur-md">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
           <button
@@ -92,9 +83,8 @@ export const DetailView: React.FC<DetailViewProps> = ({
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8 space-y-8">
-        {/* Project Header Banner & Overview */}
+        {/* Project overview */}
         <article className="rounded-2xl bg-white border border-stone-200 p-6 sm:p-8 shadow-sm">
-          {/* Metadata Top Bar */}
           <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-stone-500 pb-4 border-b border-stone-100">
             <div className="flex items-center gap-2.5">
               <span className="font-mono font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 tracking-wider">
@@ -114,12 +104,10 @@ export const DetailView: React.FC<DetailViewProps> = ({
             </div>
           </div>
 
-          {/* Project Title */}
           <h1 className="mt-6 text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight leading-tight">
             {project.title}
           </h1>
 
-          {/* Author Block */}
           <div className="mt-4 flex items-center gap-3">
             <img
               src={project.author.avatar}
@@ -137,7 +125,7 @@ export const DetailView: React.FC<DetailViewProps> = ({
             </div>
           </div>
 
-          {/* Optional Project Cover Asset */}
+          {/* Cover image */}
           {project.bannerImage && (
             <div className="mt-6 rounded-xl overflow-hidden border border-stone-200 shadow-xs">
               <img
@@ -149,9 +137,8 @@ export const DetailView: React.FC<DetailViewProps> = ({
             </div>
           )}
 
-          {/* Project Content Breakdown (Markdown Style formatting) */}
+          {/* Project content sections */}
           <div className="mt-8 space-y-6 text-sm sm:text-base text-stone-700 leading-relaxed">
-            {/* Background */}
             <div>
               <h2 className="text-base font-bold text-stone-900 flex items-center gap-2 border-b border-stone-100 pb-2">
                 <span className="text-amber-700 font-mono">01.</span> プロジェクトの背景・問題意識
@@ -161,7 +148,6 @@ export const DetailView: React.FC<DetailViewProps> = ({
               </p>
             </div>
 
-            {/* Purpose */}
             <div>
               <h2 className="text-base font-bold text-stone-900 flex items-center gap-2 border-b border-stone-100 pb-2">
                 <span className="text-amber-700 font-mono">02.</span> ゴール・達成したい熱狂
@@ -171,7 +157,7 @@ export const DetailView: React.FC<DetailViewProps> = ({
               </p>
             </div>
 
-            {/* Roles Needed with Candidacy Buttons */}
+            {/* Open roles */}
             <div>
               <h2 className="text-base font-bold text-stone-900 flex items-center gap-2 border-b border-stone-100 pb-2">
                 <span className="text-amber-700 font-mono">03.</span> 募集している役割・ポジション
@@ -222,7 +208,6 @@ export const DetailView: React.FC<DetailViewProps> = ({
               </div>
             </div>
 
-            {/* Schedule */}
             <div>
               <h2 className="text-base font-bold text-stone-900 flex items-center gap-2 border-b border-stone-100 pb-2">
                 <span className="text-amber-700 font-mono">04.</span> 想定スケジュール
@@ -237,7 +222,7 @@ export const DetailView: React.FC<DetailViewProps> = ({
               </ul>
             </div>
 
-            {/* Budget & Resources */}
+            {/* Budget */}
             <div>
               <h2 className="text-base font-bold text-stone-900 flex items-center gap-2 border-b border-stone-100 pb-2">
                 <span className="text-amber-700 font-mono">05.</span> 予算・制作リソース
@@ -248,7 +233,6 @@ export const DetailView: React.FC<DetailViewProps> = ({
             </div>
           </div>
 
-          {/* Tags */}
           <div className="mt-8 pt-6 border-t border-stone-100 flex flex-wrap gap-2 text-xs text-stone-500">
             {project.tags.map((t) => (
               <span key={t} className="bg-stone-100 px-2.5 py-1 rounded border border-stone-200">
@@ -258,7 +242,7 @@ export const DetailView: React.FC<DetailViewProps> = ({
           </div>
         </article>
 
-        {/* Discussion / Comments Section */}
+        {/* Comment thread */}
         <section className="rounded-2xl bg-white border border-stone-200 p-6 sm:p-8 shadow-sm space-y-6">
           <div className="flex items-center justify-between pb-4 border-b border-stone-100">
             <h3 className="text-lg font-bold text-stone-900 flex items-center gap-2">
@@ -272,7 +256,7 @@ export const DetailView: React.FC<DetailViewProps> = ({
             </span>
           </div>
 
-          {/* Comment Form (Interactive) */}
+          {/* Comment form */}
           <form onSubmit={handleCommentSubmit} className="space-y-3">
             <div className="flex items-center gap-2 text-xs text-stone-600">
               <span>投稿者の立場:</span>
@@ -281,10 +265,11 @@ export const DetailView: React.FC<DetailViewProps> = ({
                 onChange={(e) => setUserRoleSelection(e.target.value)}
                 className="bg-stone-50 border border-stone-200 rounded px-2.5 py-1 text-xs text-stone-800 focus:outline-none focus:border-amber-500"
               >
-                <option value="クリエイティブディレクター">佐藤 匠（クリエイティブディレクター）</option>
-                <option value="エディトリアルデザイナー">佐藤 匠（エディトリアルデザイナーとして）</option>
-                <option value="コピーライター">佐藤 匠（コピーライターとして）</option>
-                <option value="PR・進行管理">佐藤 匠（PR・進行管理として）</option>
+                {COMMENT_ROLE_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -313,7 +298,7 @@ export const DetailView: React.FC<DetailViewProps> = ({
             </div>
           </form>
 
-          {/* Existing Comments List */}
+          {/* Comments */}
           <div className="mt-8 space-y-4 pt-6 border-t border-stone-100">
             {project.comments.map((comment) => {
               const isLiked = likedComments[comment.id];

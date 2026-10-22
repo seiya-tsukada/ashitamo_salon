@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { X, ArrowRight, Check, Lock } from 'lucide-react';
+import { SITE_NAME } from '../constants/site';
+import { MONTHLY_FEE, PASSWORD_MIN_LENGTH, SIGNUP_STEPS, SignupStep } from '../constants/signup';
 
 interface SignupModalProps {
   onClose: () => void;
@@ -7,18 +9,11 @@ interface SignupModalProps {
   onSkip: () => void;
 }
 
-type Step = 'account' | 'payment' | 'done';
-
-const STEPS: { key: Exclude<Step, 'done'>; label: string }[] = [
-  { key: 'account', label: 'アカウント登録' },
-  { key: 'payment', label: 'お支払い' },
-];
-
 const inputClass =
   'w-full px-4 py-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-stone-900 transition-colors';
 
 export const SignupModal: React.FC<SignupModalProps> = ({ onClose, onComplete, onSkip }) => {
-  const [step, setStep] = useState<Step>('account');
+  const [step, setStep] = useState<SignupStep>('account');
 
   // Close on Escape and lock background scroll while open
   useEffect(() => {
@@ -79,7 +74,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose, onComplete, o
             <>
               {/* Step indicator */}
               <ol className="flex items-center gap-3 text-[11px] font-semibold">
-                {STEPS.map((s, i) => {
+                {SIGNUP_STEPS.map((s, i) => {
                   const isActive = s.key === step;
                   const isDone = step === 'payment' && s.key === 'account';
                   return (
@@ -92,7 +87,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose, onComplete, o
                         {isDone ? <Check className="w-3 h-3" /> : i + 1}
                       </span>
                       <span className={isActive ? 'text-stone-900' : 'text-stone-400'}>{s.label}</span>
-                      {i < STEPS.length - 1 && <span className="w-6 h-px bg-stone-300" />}
+                      {i < SIGNUP_STEPS.length - 1 && <span className="w-6 h-px bg-stone-300" />}
                     </li>
                   );
                 })}
@@ -119,9 +114,9 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose, onComplete, o
                 <input
                   required
                   type="password"
-                  minLength={8}
+                  minLength={PASSWORD_MIN_LENGTH}
                   autoComplete="new-password"
-                  placeholder="8文字以上"
+                  placeholder={`${PASSWORD_MIN_LENGTH}文字以上`}
                   className={`mt-1.5 ${inputClass}`}
                 />
               </label>
@@ -146,8 +141,8 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose, onComplete, o
           {step === 'payment' && (
             <form onSubmit={handlePaymentSubmit} className="mt-6 space-y-4">
               <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-white border border-stone-200">
-                <span className="text-sm font-semibold text-stone-900">アシタモハレルヤ 月額プラン</span>
-                <span className="text-sm font-bold text-stone-900">¥1,000<span className="text-xs font-normal text-stone-500"> / 月</span></span>
+                <span className="text-sm font-semibold text-stone-900">{SITE_NAME} 月額プラン</span>
+                <span className="text-sm font-bold text-stone-900">{MONTHLY_FEE.display}<span className="text-xs font-normal text-stone-500"> / 月</span></span>
               </div>
               <label className="block">
                 <span className="text-xs font-semibold text-stone-600">カード番号</span>
@@ -180,7 +175,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose, onComplete, o
                 className="w-full mt-2 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-stone-900 text-white text-sm font-bold hover:bg-stone-700 transition-colors cursor-pointer"
               >
                 <Lock className="w-4 h-4" />
-                登録して支払う（月額 1,000円）
+                登録して支払う（{MONTHLY_FEE.label}）
               </button>
               <div className="flex items-center justify-between text-xs">
                 <button
@@ -201,7 +196,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose, onComplete, o
                 <Check className="w-7 h-7" />
               </div>
               <h2 id="signup-title" className="mt-6 text-2xl font-black tracking-tight text-stone-900">
-                ようこそ、アシタモハレルヤへ。
+                ようこそ、{SITE_NAME}へ。
               </h2>
               <p className="mt-3 text-sm text-stone-600">さっそく仲間の企画をのぞいてみましょう。</p>
               <button

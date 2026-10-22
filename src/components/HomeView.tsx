@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
-import { ProjectItem, CategoryType } from '../types';
-import { 
-  Plus, 
-  Search, 
-  Users, 
-  Clock, 
-  ArrowRight, 
-  Sparkles, 
-  Heart,
-  Calendar,
-  X
-} from 'lucide-react';
+import { ProjectItem, CategoryType, ProjectCategory } from '../types';
+import { Plus, Search, Users, ArrowRight, Sparkles, Heart, X } from 'lucide-react';
+import { CURRENT_USER } from '../constants/currentUser';
+import {
+  ALL_CATEGORIES,
+  CATEGORY_FILTERS,
+  JUST_NOW_LABEL,
+  NEW_PROJECT_DEFAULTS,
+  PROJECT_CATEGORY_OPTIONS,
+} from '../constants/project';
 
 interface HomeViewProps {
   projects: ProjectItem[];
@@ -25,27 +23,26 @@ export const HomeView: React.FC<HomeViewProps> = ({
   onNavigateToAdmin,
   onCreateProject,
 }) => {
-  const [activeCategory, setActiveCategory] = useState<CategoryType>('すべて');
+  const [activeCategory, setActiveCategory] = useState<CategoryType>(ALL_CATEGORIES);
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Form state for creating a new project
   const [newTitle, setNewTitle] = useState('');
-  const [newCategory, setNewCategory] = useState<'公式' | '編集' | 'デザイン' | '雑談'>('編集');
+  const [newCategory, setNewCategory] = useState<ProjectCategory>(NEW_PROJECT_DEFAULTS.category);
   const [newLead, setNewLead] = useState('');
-  const [newSlots, setNewSlots] = useState('3');
-  const [newTags, setNewTags] = useState('新企画, コミュニティ');
+  const [newSlots, setNewSlots] = useState(NEW_PROJECT_DEFAULTS.slots);
+  const [newTags, setNewTags] = useState(NEW_PROJECT_DEFAULTS.tags);
 
-  const categories: CategoryType[] = ['すべて', '公式', '編集', 'デザイン', '雑談'];
-
+  const query = searchQuery.toLowerCase();
   const filteredProjects = projects.filter((project) => {
     const matchesCategory =
-      activeCategory === 'すべて' || project.category === activeCategory;
+      activeCategory === ALL_CATEGORIES || project.category === activeCategory;
     const matchesSearch =
-      project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.lead.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      project.author.name.toLowerCase().includes(searchQuery.toLowerCase());
+      project.title.toLowerCase().includes(query) ||
+      project.lead.toLowerCase().includes(query) ||
+      project.tags.some((tag) => tag.toLowerCase().includes(query)) ||
+      project.author.name.toLowerCase().includes(query);
     return matchesCategory && matchesSearch;
   });
 
@@ -53,41 +50,45 @@ export const HomeView: React.FC<HomeViewProps> = ({
     e.preventDefault();
     if (!newTitle.trim() || !newLead.trim()) return;
 
+    const now = Date.now();
+    const slots = parseInt(newSlots);
+    const author = {
+      name: CURRENT_USER.name,
+      role: CURRENT_USER.role,
+      avatar: CURRENT_USER.avatar,
+    };
+
     const created: ProjectItem = {
-      id: `proj-${Date.now()}`,
+      id: `proj-${now}`,
       category: newCategory,
       title: newTitle.trim(),
       lead: newLead.trim(),
-      author: {
-        name: '佐藤 匠（Takumi Sato）',
-        role: 'クリエイティブディレクター',
-        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
-      },
-      publishedAt: 'たった今',
-      recruitmentDeadline: '2026年11月30日',
-      targetSlots: parseInt(newSlots) || 3,
+      author,
+      publishedAt: JUST_NOW_LABEL,
+      recruitmentDeadline: NEW_PROJECT_DEFAULTS.recruitmentDeadline,
+      targetSlots: slots || NEW_PROJECT_DEFAULTS.fallbackSlots,
       currentMembers: 1,
       tags: newTags.split(',').map((t) => t.trim()).filter(Boolean),
       fullContent: {
         background: newLead.trim(),
-        purpose: 'サロンメンバーとの共創による温かな新規アウトプット創出',
+        purpose: NEW_PROJECT_DEFAULTS.purpose,
         rolesNeeded: [
           { role: 'プロジェクト共同リーダー', count: '1名', description: '進捗管理と企画ディレクション', filled: false },
-          { role: 'クリエイティブ制作メンバー', count: `${parseInt(newSlots) - 1 || 2}名`, description: '実制作・デザイン・実装', filled: false }
+          { role: 'クリエイティブ制作メンバー', count: `${slots - 1 || NEW_PROJECT_DEFAULTS.fallbackCreativeSlots}名`, description: '実制作・デザイン・実装', filled: false }
         ],
-        schedule: ['第1週：顔合わせキックオフ', '第2週：プロトタイプ', '第4週：リリース'],
-        resources: '制作予算：サロン運営費より応相談支援あり。'
+        schedule: [...NEW_PROJECT_DEFAULTS.schedule],
+        resources: NEW_PROJECT_DEFAULTS.resources,
       },
       comments: [
         {
-          id: `c-init-${Date.now()}`,
-          author: '佐藤 匠（Takumi Sato）',
-          authorRole: 'クリエイティブディレクター',
-          authorAvatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
-          content: '起案しました！興味がある方はぜひ気軽にコメントや立候補をしてくださいね。',
-          createdAt: 'たった今',
-          likes: 1
-        }
+          id: `c-init-${now}`,
+          author: author.name,
+          authorRole: author.role,
+          authorAvatar: author.avatar,
+          content: NEW_PROJECT_DEFAULTS.initialComment,
+          createdAt: JUST_NOW_LABEL,
+          likes: 1,
+        },
       ]
     };
 
@@ -99,7 +100,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-stone-800 pb-20">
-      {/* Subheader / Welcome banner */}
+      {/* Header */}
       <section className="bg-gradient-to-r from-amber-50/80 via-orange-50/50 to-amber-50/80 border-b border-stone-200/80 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -129,13 +130,12 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </section>
 
-      {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        {/* Filter Bar & Search */}
+        {/* Filters */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pb-6 border-b border-stone-200">
-          {/* Category Filter Tabs */}
+          {/* Category tabs */}
           <div className="flex items-center gap-1.5 p-1 bg-stone-100/90 border border-stone-200 rounded-xl overflow-x-auto">
-            {categories.map((cat) => (
+            {CATEGORY_FILTERS.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
@@ -150,7 +150,6 @@ export const HomeView: React.FC<HomeViewProps> = ({
             ))}
           </div>
 
-          {/* Search Input */}
           <div className="relative w-full sm:w-72">
             <Search className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
@@ -163,7 +162,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
           </div>
         </div>
 
-        {/* Project Count Indicator */}
+        {/* Result count */}
         <div className="py-4 flex items-center justify-between text-xs text-stone-500">
           <div>
             表示中: <span className="font-mono text-stone-900 tabular-nums font-bold">{filteredProjects.length}</span> 件のプロジェクト
@@ -173,13 +172,13 @@ export const HomeView: React.FC<HomeViewProps> = ({
           </div>
         </div>
 
-        {/* Project Cards List */}
+        {/* Project cards */}
         {filteredProjects.length === 0 ? (
           <div className="text-center py-20 border border-stone-200 rounded-2xl bg-white shadow-xs">
             <p className="text-sm text-stone-600">該当するプロジェクトが見つかりませんでした。</p>
             <button
               onClick={() => {
-                setActiveCategory('すべて');
+                setActiveCategory(ALL_CATEGORIES);
                 setSearchQuery('');
               }}
               className="mt-3 text-xs text-orange-600 underline cursor-pointer"
@@ -195,7 +194,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 onClick={() => onSelectProject(project.id)}
                 className="group relative rounded-2xl bg-white border border-stone-200/90 p-6 flex flex-col justify-between hover:border-amber-300 hover:shadow-lg transition-all duration-200 cursor-pointer shadow-sm"
               >
-                {/* Top Row: Category tag, Author & Timestamp */}
+                {/* Category, date, slots */}
                 <div>
                   <div className="flex items-center justify-between gap-3 text-xs text-stone-500 mb-3">
                     <div className="flex items-center gap-2">
@@ -214,20 +213,17 @@ export const HomeView: React.FC<HomeViewProps> = ({
                     </div>
                   </div>
 
-                  {/* Title */}
                   <h2 className="text-lg sm:text-xl font-bold text-stone-900 group-hover:text-orange-600 transition-colors leading-snug">
                     {project.title}
                   </h2>
 
-                  {/* Lead text */}
                   <p className="mt-3 text-xs sm:text-sm text-stone-600 line-clamp-3 leading-relaxed">
                     {project.lead}
                   </p>
                 </div>
 
-                {/* Bottom Row: Tags & Author lockup */}
+                {/* Tags and author */}
                 <div className="mt-6 pt-4 border-t border-stone-100 flex flex-col gap-3">
-                  {/* Clean unboxed tags */}
                   <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] text-stone-500">
                     {project.tags.map((tag) => (
                       <span key={tag} className="hover:text-orange-600 transition-colors">
@@ -237,7 +233,6 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   </div>
 
                   <div className="flex items-center justify-between pt-1">
-                    {/* Author info */}
                     <div className="flex items-center gap-2.5">
                       <img
                         src={project.author.avatar}
@@ -255,7 +250,6 @@ export const HomeView: React.FC<HomeViewProps> = ({
                       </div>
                     </div>
 
-                    {/* View Details Prompt */}
                     <div className="inline-flex items-center gap-1 text-xs font-bold text-amber-700 group-hover:text-orange-600 group-hover:translate-x-1 transition-all">
                       <span>詳細・提案</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -268,7 +262,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
         )}
       </div>
 
-      {/* Modal for Pitching New Project */}
+      {/* New project modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="relative w-full max-w-lg rounded-2xl bg-white border border-stone-200 p-6 sm:p-8 shadow-2xl">
@@ -293,7 +287,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   カテゴリ
                 </label>
                 <div className="grid grid-cols-4 gap-2">
-                  {(['編集', 'デザイン', '公式', '雑談'] as const).map((cat) => (
+                  {PROJECT_CATEGORY_OPTIONS.map((cat) => (
                     <button
                       type="button"
                       key={cat}

@@ -1,6 +1,10 @@
 export type PageType = 'lp' | 'home' | 'detail' | 'admin';
 
-export type CategoryType = 'すべて' | '公式' | '編集' | 'デザイン' | '雑談';
+export type ProjectCategory = '公式' | '編集' | 'デザイン' | '雑談';
+
+export type CategoryType = 'すべて' | ProjectCategory;
+
+export type MemberStatus = 'アクティブ' | '決済エラー' | '休会中' | '新規';
 
 export interface CommentItem {
   id: string;
@@ -14,7 +18,7 @@ export interface CommentItem {
 
 export interface ProjectItem {
   id: string;
-  category: '公式' | '編集' | 'デザイン' | '雑談';
+  category: ProjectCategory;
   title: string;
   lead: string;
   author: {
@@ -46,7 +50,7 @@ export interface MemberItem {
   role: string;
   joinedAt: string;
   activeProjects: number;
-  status: 'アクティブ' | '決済エラー' | '休会中' | '新規';
+  status: MemberStatus;
   monthlyPlan: string;
 }
 

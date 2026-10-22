@@ -1,4 +1,5 @@
 import { ProjectItem, MemberItem, ReportItem } from '../types';
+import { IMAGES } from '../constants/images';
 
 export const INITIAL_PROJECTS: ProjectItem[] = [
   {
@@ -16,7 +17,7 @@ export const INITIAL_PROJECTS: ProjectItem[] = [
     targetSlots: 6,
     currentMembers: 4,
     tags: ['出版企画', 'デザイン', '編集', 'クラファン連動'],
-    bannerImage: '/images/warm_publishing_lab_1792395805210.jpg',
+    bannerImage: IMAGES.publishing,
     fullContent: {
       background: 'デジタル全盛の時代だからこそ、「手元に残したい究極の1冊」をみんなで創る価値がある。既存の大手取次や書店流通のルールに縛られず、サロンメンバー自らが取材し、執筆し、デザインし、印刷立ち会いまで行う実験的出版プロジェクトです。初版部数は限定3,000部。すでに先行クラファンで1,200万円の支援を獲得しています。',
       purpose: '単なる情報伝達ではなく、手に取った読者が「自分も表現者になりたい」と温かな勇気を覚えるような媒体を世に放つこと。',
@@ -80,7 +81,7 @@ export const INITIAL_PROJECTS: ProjectItem[] = [
     targetSlots: 5,
     currentMembers: 3,
     tags: ['ハードウェア', '工業デザイン', '3Dプリンタ', 'IoT'],
-    bannerImage: '/images/warm_product_design_1792395807048.jpg',
+    bannerImage: IMAGES.product,
     fullContent: {
       background: '手で触れる「心地よい質感」と「重み」を持つガジェットが日々のクリエイティビティを支える。木目や陶器のような自然な手触りと、精密な操作感を両立したクリエイター専用の触覚インターフェースを開発しています。',
       purpose: '量産試作ライン立ち上げ前の、最終プロトタイプ検証。Kickstarterでのグローバルローンチを視野に入れています。',
@@ -132,7 +133,7 @@ export const INITIAL_PROJECTS: ProjectItem[] = [
     targetSlots: 10,
     currentMembers: 7,
     tags: ['リアルイベント', '地方創生', '空間デザイン', '飲食プロデュース'],
-    bannerImage: '/images/warm_community_fest_1792395806083.jpg',
+    bannerImage: IMAGES.festival,
     fullContent: {
       background: 'オンラインのつながりを、リアルなあたたかい「出会いと共創の現場」に昇華させる年間最大フェス。参加者全員が観客ではなく仲間であり表現者。地方自治体とタッグを組み、過疎化が進む地域の廃校を2日間限定のあたたかい文化祭へ変貌させます。',
       purpose: '地域の人々とサロンメンバーが笑顔で交わる新しい地方創生モデルを作り、息の長い関係性を育てること。',

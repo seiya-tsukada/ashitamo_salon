@@ -1,21 +1,26 @@
 import React, { useState } from 'react';
-import { MemberItem, ReportItem } from '../types';
-import { 
-  Users, 
-  DollarSign, 
-  TrendingUp, 
-  AlertTriangle, 
-  ArrowLeft, 
-  Trash2, 
-  CheckCircle2, 
-  RefreshCw, 
-  ShieldAlert, 
+import { MemberItem, MemberStatus, ReportItem } from '../types';
+import {
+  Users,
+  DollarSign,
+  TrendingUp,
+  AlertTriangle,
+  ArrowLeft,
+  Trash2,
+  CheckCircle2,
+  RefreshCw,
+  ShieldAlert,
   Search,
-  Filter,
-  Check,
   X,
-  Lock
 } from 'lucide-react';
+import { SITE_NAME } from '../constants/site';
+import {
+  ADMIN_STATS,
+  MEMBER_STATUS_FILTERS,
+  MEMBER_STATUS_STYLES,
+  MemberStatusFilter,
+  TOAST_DURATION_MS,
+} from '../constants/admin';
 
 interface AdminViewProps {
   members: MemberItem[];
@@ -23,7 +28,7 @@ interface AdminViewProps {
   onBack: () => void;
   onDeleteReport: (reportId: string) => void;
   onDismissReport: (reportId: string) => void;
-  onUpdateMemberStatus: (memberId: string, newStatus: MemberItem['status']) => void;
+  onUpdateMemberStatus: (memberId: string, newStatus: MemberStatus) => void;
 }
 
 export const AdminView: React.FC<AdminViewProps> = ({
@@ -34,7 +39,7 @@ export const AdminView: React.FC<AdminViewProps> = ({
   onDismissReport,
   onUpdateMemberStatus,
 }) => {
-  const [memberFilter, setMemberFilter] = useState<'すべて' | 'アクティブ' | '決済エラー' | '休会中'>('すべて');
+  const [memberFilter, setMemberFilter] = useState<MemberStatusFilter>('すべて');
   const [memberSearch, setMemberSearch] = useState('');
   const [actionNotice, setActionNotice] = useState<string | null>(null);
 
@@ -42,15 +47,16 @@ export const AdminView: React.FC<AdminViewProps> = ({
     setActionNotice(message);
     setTimeout(() => {
       setActionNotice(null);
-    }, 3500);
+    }, TOAST_DURATION_MS);
   };
 
+  const query = memberSearch.toLowerCase();
   const filteredMembers = members.filter((m) => {
     const matchesFilter = memberFilter === 'すべて' || m.status === memberFilter;
     const matchesSearch =
-      m.name.toLowerCase().includes(memberSearch.toLowerCase()) ||
-      m.email.toLowerCase().includes(memberSearch.toLowerCase()) ||
-      m.id.toLowerCase().includes(memberSearch.toLowerCase());
+      m.name.toLowerCase().includes(query) ||
+      m.email.toLowerCase().includes(query) ||
+      m.id.toLowerCase().includes(query);
     return matchesFilter && matchesSearch;
   });
 
@@ -71,7 +77,7 @@ export const AdminView: React.FC<AdminViewProps> = ({
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-stone-800 pb-28">
-      {/* Action Notification Toast */}
+      {/* Toast */}
       {actionNotice && (
         <div className="fixed bottom-6 right-6 z-50 max-w-md p-4 rounded-xl bg-white border border-amber-300 text-xs text-stone-900 shadow-xl shadow-stone-200 flex items-center justify-between gap-3 animate-in slide-in-from-bottom-3 duration-200">
           <div className="flex items-center gap-2">
@@ -87,7 +93,7 @@ export const AdminView: React.FC<AdminViewProps> = ({
         </div>
       )}
 
-      {/* Admin Subheader with Back Button and Route Indication */}
+      {/* Header */}
       <section className="bg-white border-b border-stone-200 py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
@@ -103,7 +109,7 @@ export const AdminView: React.FC<AdminViewProps> = ({
               <div className="flex items-center gap-2 text-[11px] font-mono text-amber-800 font-bold uppercase tracking-wider">
                 <span className="px-1.5 py-0.5 rounded bg-amber-100 border border-amber-300">/admin</span>
                 <span className="text-stone-400">/</span>
-                <span>アシタモハレルヤ CORE OPERATIONS</span>
+                <span>{SITE_NAME} CORE OPERATIONS</span>
               </div>
               <h1 className="text-xl sm:text-2xl font-black text-stone-900 tracking-tight mt-0.5">
                 サロン運営管理ダッシュボード
@@ -121,52 +127,48 @@ export const AdminView: React.FC<AdminViewProps> = ({
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-10">
-        {/* 4 Summary Cards */}
+        {/* KPI cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {/* Card 1: 総会員数 */}
           <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm relative overflow-hidden">
             <div className="flex items-center justify-between text-xs text-stone-500 mb-2">
               <span>総会員数</span>
               <Users className="w-4 h-4 text-amber-600" />
             </div>
             <div className="text-3xl font-extrabold text-stone-900 font-mono tabular-nums">
-              1,428<span className="text-sm font-normal text-stone-500 ml-1">名</span>
+              {ADMIN_STATS.totalMembers}<span className="text-sm font-normal text-stone-500 ml-1">名</span>
             </div>
             <div className="mt-3 flex items-center gap-1.5 text-xs text-emerald-700 font-medium">
               <TrendingUp className="w-3.5 h-3.5" />
-              <span>前月比 +12.4% (純増 158名)</span>
+              <span>{ADMIN_STATS.memberGrowth}</span>
             </div>
           </div>
 
-          {/* Card 2: 今月の売上 */}
           <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm relative overflow-hidden">
             <div className="flex items-center justify-between text-xs text-stone-500 mb-2">
               <span>今月の売上 (MRR)</span>
               <DollarSign className="w-4 h-4 text-amber-600" />
             </div>
             <div className="text-3xl font-extrabold text-stone-900 font-mono tabular-nums">
-              ¥1,428,000
+              {ADMIN_STATS.monthlyRevenue}
             </div>
             <div className="mt-3 text-xs text-stone-500">
-              決済成功率 <span className="text-stone-800 font-bold font-mono">98.2%</span>
+              決済成功率 <span className="text-stone-800 font-bold font-mono">{ADMIN_STATS.paymentSuccessRate}</span>
             </div>
           </div>
 
-          {/* Card 3: アクティブ率 */}
           <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm relative overflow-hidden">
             <div className="flex items-center justify-between text-xs text-stone-500 mb-2">
               <span>アクティブ率</span>
               <TrendingUp className="w-4 h-4 text-amber-600" />
             </div>
             <div className="text-3xl font-extrabold text-stone-900 font-mono tabular-nums">
-              84.6<span className="text-sm font-normal text-stone-500 ml-1">%</span>
+              {ADMIN_STATS.activeRate}<span className="text-sm font-normal text-stone-500 ml-1">%</span>
             </div>
             <div className="mt-3 text-xs text-stone-500">
               月次DAU/MAU比 · 投稿・コメント関与
             </div>
           </div>
 
-          {/* Card 4: 未処理通報数 */}
           <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-sm relative overflow-hidden">
             <div className="flex items-center justify-between text-xs text-stone-500 mb-2">
               <span>未処理通報数</span>
@@ -184,7 +186,7 @@ export const AdminView: React.FC<AdminViewProps> = ({
           </div>
         </div>
 
-        {/* Moderation Section (通報モデレーション) */}
+        {/* Report moderation */}
         <section className="rounded-2xl bg-white border border-stone-200 shadow-sm p-6 sm:p-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-stone-100">
             <div>
@@ -242,7 +244,6 @@ export const AdminView: React.FC<AdminViewProps> = ({
                     </div>
                   </div>
 
-                  {/* Actions for Report */}
                   <div className="flex items-center gap-2 shrink-0 pt-2 md:pt-0">
                     <button
                       onClick={() => handleDismissReport(report.id)}
@@ -264,7 +265,7 @@ export const AdminView: React.FC<AdminViewProps> = ({
           )}
         </section>
 
-        {/* Member Status Management Table */}
+        {/* Member management */}
         <section className="rounded-2xl bg-white border border-stone-200 shadow-sm p-6 sm:p-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-stone-100">
             <div>
@@ -276,11 +277,10 @@ export const AdminView: React.FC<AdminViewProps> = ({
               </p>
             </div>
 
-            {/* Filter controls */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              {/* Status Segmented Buttons */}
+              {/* Status tabs */}
               <div className="flex items-center gap-1 p-1 bg-stone-100 border border-stone-200 rounded-lg text-xs">
-                {(['すべて', 'アクティブ', '決済エラー', '休会中'] as const).map((st) => (
+                {MEMBER_STATUS_FILTERS.map((st) => (
                   <button
                     key={st}
                     onClick={() => setMemberFilter(st)}
@@ -295,7 +295,6 @@ export const AdminView: React.FC<AdminViewProps> = ({
                 ))}
               </div>
 
-              {/* Search input */}
               <div className="relative">
                 <Search className="w-3.5 h-3.5 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
@@ -309,7 +308,6 @@ export const AdminView: React.FC<AdminViewProps> = ({
             </div>
           </div>
 
-          {/* Table Container */}
           <div className="mt-4 overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
@@ -325,7 +323,6 @@ export const AdminView: React.FC<AdminViewProps> = ({
               <tbody className="divide-y divide-stone-100">
                 {filteredMembers.map((member) => (
                   <tr key={member.id} className="hover:bg-stone-50 transition-colors">
-                    {/* User info */}
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-3">
                         <img
@@ -348,50 +345,27 @@ export const AdminView: React.FC<AdminViewProps> = ({
                       </div>
                     </td>
 
-                    {/* Plan */}
                     <td className="py-3.5 px-4 font-mono text-stone-700">
                       {member.monthlyPlan}
                     </td>
 
-                    {/* Join Date */}
                     <td className="py-3.5 px-4 font-mono text-stone-500 tabular-nums">
                       {member.joinedAt}
                     </td>
 
-                    {/* Active Projects count */}
                     <td className="py-3.5 px-4 text-center font-mono tabular-nums text-stone-800">
                       <span className="font-bold">{member.activeProjects}</span> 案件
                     </td>
 
-                    {/* Status Badge */}
                     <td className="py-3.5 px-4">
-                      {member.status === 'アクティブ' && (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                          アクティブ
-                        </span>
-                      )}
-                      {member.status === '決済エラー' && (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-700 border border-rose-200">
-                          <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
-                          決済エラー
-                        </span>
-                      )}
-                      {member.status === '休会中' && (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-stone-100 text-stone-600 border border-stone-200">
-                          <span className="w-1.5 h-1.5 rounded-full bg-stone-400" />
-                          休会中
-                        </span>
-                      )}
-                      {member.status === '新規' && (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-200">
-                          <span className="w-1.5 h-1.5 rounded-full bg-sky-500" />
-                          新規
-                        </span>
-                      )}
+                      <span
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${MEMBER_STATUS_STYLES[member.status].badge}`}
+                      >
+                        <span className={`w-1.5 h-1.5 rounded-full ${MEMBER_STATUS_STYLES[member.status].dot}`} />
+                        {member.status}
+                      </span>
                     </td>
 
-                    {/* Actions */}
                     <td className="py-3.5 px-4 text-right">
                       {member.status === '決済エラー' ? (
                         <button

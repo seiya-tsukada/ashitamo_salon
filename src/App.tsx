@@ -1,6 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { PageType, ProjectItem, CommentItem, MemberItem, ReportItem } from './types';
+import { useState, useEffect, useCallback } from 'react';
+import { PageType, ProjectItem, CommentItem, MemberItem, MemberStatus, ReportItem } from './types';
 import { INITIAL_PROJECTS, MOCK_MEMBERS, MOCK_REPORTS } from './data/mockData';
+import { DEFAULT_PROJECT_ID, PAGE_PATHS } from './constants/routes';
+import { MEMBER_STORAGE_KEY } from './constants/storage';
+import { resolvePageFromLocation } from './utils/routing';
 import { Navbar } from './components/Navbar';
 import { LPView } from './components/LPView';
 import { HomeView } from './components/HomeView';
@@ -8,25 +11,14 @@ import { DetailView } from './components/DetailView';
 import { AdminView } from './components/AdminView';
 import { SignupModal } from './components/SignupModal';
 
-const MEMBER_STORAGE_KEY = 'ashitamo:isMember';
-
 export default function App() {
-  // Initialize current page based on browser path (/admin -> 'admin')
+  // Initial page comes from the URL; /detail is not restored on first load (no project id yet)
   const [currentPage, setCurrentPage] = useState<PageType>(() => {
-    if (typeof window !== 'undefined') {
-      const path = window.location.pathname;
-      const hash = window.location.hash;
-      if (path === '/admin' || path.startsWith('/admin') || hash === '#/admin' || hash === '#admin') {
-        return 'admin';
-      }
-      if (path === '/home' || hash === '#home') {
-        return 'home';
-      }
-    }
-    return 'lp';
+    const page = resolvePageFromLocation();
+    return page === 'detail' ? 'lp' : page;
   });
 
-  const [selectedProjectId, setSelectedProjectId] = useState<string>('proj-01');
+  const [selectedProjectId, setSelectedProjectId] = useState<string>(DEFAULT_PROJECT_ID);
   const [projects, setProjects] = useState<ProjectItem[]>(INITIAL_PROJECTS);
   const [members, setMembers] = useState<MemberItem[]>(MOCK_MEMBERS);
   const [reports, setReports] = useState<ReportItem[]>(MOCK_REPORTS);
@@ -41,46 +33,21 @@ export default function App() {
   });
   const [isSignupOpen, setIsSignupOpen] = useState(false);
 
-  // Sync with browser back/forward buttons (popstate)
+  // Sync with browser back/forward buttons
   useEffect(() => {
-    const handlePopState = () => {
-      const path = window.location.pathname;
-      const hash = window.location.hash;
-      if (path === '/admin' || path.startsWith('/admin') || hash === '#/admin' || hash === '#admin') {
-        setCurrentPage('admin');
-      } else if (path === '/home' || hash === '#home') {
-        setCurrentPage('home');
-      } else if (path === '/detail' || hash === '#detail') {
-        setCurrentPage('detail');
-      } else {
-        setCurrentPage('lp');
-      }
-    };
-
+    const handlePopState = () => setCurrentPage(resolvePageFromLocation());
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Smooth navigation with browser History URL pushState
   const handleNavigate = (page: PageType) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    if (typeof window !== 'undefined') {
-      try {
-        if (page === 'admin') {
-          window.history.pushState({ page: 'admin' }, '', '/admin');
-        } else if (page === 'home') {
-          window.history.pushState({ page: 'home' }, '', '/home');
-        } else if (page === 'lp') {
-          window.history.pushState({ page: 'lp' }, '', '/');
-        } else if (page === 'detail') {
-          window.history.pushState({ page: 'detail' }, '', '/detail');
-        }
-      } catch (err) {
-        // Fallback for sandboxed iframes where pushState may be restricted
-        console.warn('History pushState fallback:', err);
-      }
+    try {
+      window.history.pushState({ page }, '', PAGE_PATHS[page]);
+    } catch (err) {
+      // pushState can throw in restricted contexts; navigation still works without URL sync
+      console.warn('History pushState fallback:', err);
     }
   };
 
@@ -116,12 +83,10 @@ export default function App() {
     setSelectedProjectId(projectId);
     setCurrentPage('detail');
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    if (typeof window !== 'undefined') {
-      try {
-        window.history.pushState({ page: 'detail', id: projectId }, '', `/detail?id=${projectId}`);
-      } catch (err) {
-        // Fallback
-      }
+    try {
+      window.history.pushState({ page: 'detail', id: projectId }, '', `${PAGE_PATHS.detail}?id=${projectId}`);
+    } catch {
+      // Same as handleNavigate: URL sync is best-effort
     }
   };
 
@@ -143,15 +108,12 @@ export default function App() {
     setProjects((prev) => [newProject, ...prev]);
   };
 
-  const handleDeleteReport = (reportId: string) => {
+  // Both deleting the content and dismissing the report resolve it, removing it from the queue
+  const resolveReport = (reportId: string) => {
     setReports((prev) => prev.filter((r) => r.id !== reportId));
   };
 
-  const handleDismissReport = (reportId: string) => {
-    setReports((prev) => prev.filter((r) => r.id !== reportId));
-  };
-
-  const handleUpdateMemberStatus = (memberId: string, newStatus: MemberItem['status']) => {
+  const handleUpdateMemberStatus = (memberId: string, newStatus: MemberStatus) => {
     setMembers((prev) =>
       prev.map((m) => (m.id === memberId ? { ...m, status: newStatus } : m))
     );
@@ -163,10 +125,8 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-stone-800 flex flex-col font-sans selection:bg-amber-200 selection:text-stone-900">
-      {/* Top Navbar */}
       <Navbar currentPage={currentPage} onNavigate={handleNavigate} onEnterSalon={handleEnterSalon} />
 
-      {/* Main Page View router */}
       <main className="flex-1">
         {currentPage === 'lp' && (
           <LPView onNavigate={handleNavigate} onEnterSalon={handleEnterSalon} />
@@ -194,8 +154,8 @@ export default function App() {
             members={members}
             reports={reports}
             onBack={() => handleNavigate('home')}
-            onDeleteReport={handleDeleteReport}
-            onDismissReport={handleDismissReport}
+            onDeleteReport={resolveReport}
+            onDismissReport={resolveReport}
             onUpdateMemberStatus={handleUpdateMemberStatus}
           />
         )}

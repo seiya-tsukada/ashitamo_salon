@@ -1,0 +1,18 @@
+// Logged-in user for the mock (no auth backend yet)
+export const CURRENT_USER = {
+  name: '佐藤 匠（Takumi Sato）',
+  displayName: '佐藤 匠',
+  role: 'クリエイティブディレクター',
+  planLabel: 'Pro Member',
+  avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+  avatarThumb: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80',
+} as const;
+
+export const DEFAULT_COMMENT_ROLE = 'デザイナー / エンジニア';
+
+export const COMMENT_ROLE_OPTIONS: { value: string; label: string }[] = [
+  { value: 'クリエイティブディレクター', label: '佐藤 匠（クリエイティブディレクター）' },
+  { value: 'エディトリアルデザイナー', label: '佐藤 匠（エディトリアルデザイナーとして）' },
+  { value: 'コピーライター', label: '佐藤 匠（コピーライターとして）' },
+  { value: 'PR・進行管理', label: '佐藤 匠（PR・進行管理として）' },
+];
