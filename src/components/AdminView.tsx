@@ -79,7 +79,7 @@ export const AdminView: React.FC<AdminViewProps> = ({
     <div className="min-h-screen bg-[#FAF8F5] text-stone-800 pb-28">
       {/* Toast */}
       {actionNotice && (
-        <div className="fixed bottom-6 right-6 z-50 max-w-md p-4 rounded-xl bg-white border border-amber-300 text-xs text-stone-900 shadow-xl shadow-stone-200 flex items-center justify-between gap-3 animate-in slide-in-from-bottom-3 duration-200">
+        <div className="fixed bottom-6 right-6 z-50 max-w-md p-4 rounded-xl bg-white border border-amber-300 text-xs text-stone-900 shadow-xl shadow-stone-200 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>{actionNotice}</span>
