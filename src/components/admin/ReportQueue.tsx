@@ -14,9 +14,7 @@ export const ReportQueue: React.FC<ReportQueueProps> = ({ reports, onDelete, onD
       <div>
         <div className="flex items-center gap-2">
           <ShieldAlert className="w-4 h-4 text-amber-600" />
-          <h2 className="text-lg font-bold text-stone-900">
-            通報モデレーション
-          </h2>
+          <h2 className="text-lg font-bold text-stone-900">通報モデレーション</h2>
           <span className="text-xs font-mono px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-bold tabular-nums">
             {reports.length} 件
           </span>
@@ -44,15 +42,9 @@ export const ReportQueue: React.FC<ReportQueueProps> = ({ reports, onDelete, onD
                 <span className="font-mono text-[11px] text-stone-600 bg-white px-2 py-0.5 rounded border border-stone-200">
                   {report.id}
                 </span>
-                <span className="font-mono font-bold text-amber-800">
-                  [{report.targetType}]
-                </span>
-                <span className="text-stone-900 font-bold">
-                  {report.targetTitle}
-                </span>
-                <span className="text-stone-400 font-mono text-[11px]">
-                  · {report.timestamp}
-                </span>
+                <span className="font-mono font-bold text-amber-800">[{report.targetType}]</span>
+                <span className="text-stone-900 font-bold">{report.targetTitle}</span>
+                <span className="text-stone-400 font-mono text-[11px]">· {report.timestamp}</span>
               </div>
 
               <div className="text-xs text-rose-800 bg-rose-50 border border-rose-200 p-2.5 rounded-lg">
@@ -61,8 +53,12 @@ export const ReportQueue: React.FC<ReportQueueProps> = ({ reports, onDelete, onD
               </div>
 
               <div className="text-[11px] text-stone-600 flex items-center gap-4">
-                <span>対象ユーザー: <strong className="text-stone-900">{report.reportedUser}</strong></span>
-                <span>通報者: <strong className="text-stone-900">{report.reporterUser}</strong></span>
+                <span>
+                  対象ユーザー: <strong className="text-stone-900">{report.reportedUser}</strong>
+                </span>
+                <span>
+                  通報者: <strong className="text-stone-900">{report.reporterUser}</strong>
+                </span>
               </div>
             </div>
 

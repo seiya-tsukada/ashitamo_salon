@@ -54,7 +54,11 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({ onSubmit, onBack }) =>
         登録して支払う（{MONTHLY_FEE.label}）
       </Button>
       <div className="flex items-center justify-between text-xs">
-        <button type="button" onClick={onBack} className="text-stone-500 hover:text-stone-900 transition-colors cursor-pointer">
+        <button
+          type="button"
+          onClick={onBack}
+          className="text-stone-500 hover:text-stone-900 transition-colors cursor-pointer"
+        >
           ← 戻る
         </button>
         <span className="text-stone-400">※ モックのため実際の決済は行われません</span>

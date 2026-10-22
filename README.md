@@ -17,14 +17,15 @@
 npm install
 npm run dev     # http://localhost:3000
 npm run build   # dist/ に出力
-npm run lint    # 型チェック
+npm run lint    # 型チェック + oxlint
+npm run format  # Prettier で整形
 ```
 
 ## ディレクトリ構成
 
 ```
 src/
-  components/  各画面・UI コンポーネント
+  components/  画面ごとのコンポーネント（ui/ は共通部品）
   constants/   サイト情報・ルート・表示用の定数
   data/        モックデータ
   utils/       ルーティング等のヘルパー

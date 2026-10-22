@@ -100,7 +100,7 @@ export default function App() {
           };
         }
         return proj;
-      })
+      }),
     );
   };
 
@@ -114,38 +114,25 @@ export default function App() {
   };
 
   const handleUpdateMemberStatus = (memberId: string, newStatus: MemberStatus) => {
-    setMembers((prev) =>
-      prev.map((m) => (m.id === memberId ? { ...m, status: newStatus } : m))
-    );
+    setMembers((prev) => prev.map((m) => (m.id === memberId ? { ...m, status: newStatus } : m)));
   };
 
   // Find currently selected project or fallback to first
-  const currentProject =
-    projects.find((p) => p.id === selectedProjectId) || projects[0];
+  const currentProject = projects.find((p) => p.id === selectedProjectId) || projects[0];
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-stone-800 flex flex-col font-sans selection:bg-amber-200 selection:text-stone-900">
       <Navbar currentPage={currentPage} onNavigate={handleNavigate} onEnterSalon={handleEnterSalon} />
 
       <main className="flex-1">
-        {currentPage === 'lp' && (
-          <LPView onNavigate={handleNavigate} onEnterSalon={handleEnterSalon} />
-        )}
+        {currentPage === 'lp' && <LPView onNavigate={handleNavigate} onEnterSalon={handleEnterSalon} />}
 
         {currentPage === 'home' && (
-          <HomeView
-            projects={projects}
-            onSelectProject={handleSelectProject}
-            onCreateProject={handleCreateProject}
-          />
+          <HomeView projects={projects} onSelectProject={handleSelectProject} onCreateProject={handleCreateProject} />
         )}
 
         {currentPage === 'detail' && (
-          <DetailView
-            project={currentProject}
-            onBack={() => handleNavigate('home')}
-            onAddComment={handleAddComment}
-          />
+          <DetailView project={currentProject} onBack={() => handleNavigate('home')} onAddComment={handleAddComment} />
         )}
 
         {currentPage === 'admin' && (
@@ -161,11 +148,7 @@ export default function App() {
       </main>
 
       {isSignupOpen && (
-        <SignupModal
-          onClose={handleSignupClose}
-          onComplete={handleSignupComplete}
-          onSkip={handleSignupSkip}
-        />
+        <SignupModal onClose={handleSignupClose} onComplete={handleSignupComplete} onSkip={handleSignupSkip} />
       )}
     </div>
   );

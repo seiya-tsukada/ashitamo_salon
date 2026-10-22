@@ -32,7 +32,8 @@ export const LPView: React.FC<LPViewProps> = ({ onNavigate, onEnterSalon }) => {
           </p>
 
           <h1 className="mt-5 text-[2rem] leading-[1.3] sm:text-6xl lg:text-7xl font-black tracking-tight text-white">
-            明日が、<br />
+            明日が、
+            <br />
             <span className="inline-block">待ち遠しくなる</span>
             <span className="inline-block">場所。</span>
           </h1>
@@ -68,12 +69,14 @@ export const LPView: React.FC<LPViewProps> = ({ onNavigate, onEnterSalon }) => {
                 <span>CORE ACTIVITIES</span>
               </div>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight">
-                机上の空論はいらない。<br />
+                机上の空論はいらない。
+                <br />
                 心躍るアウトプットを、仲間と一緒に。
               </h2>
             </div>
             <p className="text-sm text-stone-600 max-w-md leading-relaxed">
-              講義を聴くだけの受け身なサロンではありません。{SITE_NAME}では全員が温かな仲間として現場に入り、手を動かして世の中に優しい感動を届けます。
+              講義を聴くだけの受け身なサロンではありません。{SITE_NAME}
+              では全員が温かな仲間として現場に入り、手を動かして世の中に優しい感動を届けます。
             </p>
           </div>
 
@@ -88,9 +91,7 @@ export const LPView: React.FC<LPViewProps> = ({ onNavigate, onEnterSalon }) => {
       {/* Manifesto & final CTA */}
       <section className="py-24 md:py-32 bg-stone-900 text-center">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <p className="text-[11px] sm:text-xs font-semibold tracking-[0.3em] text-amber-200/80">
-            OUR MANIFESTO
-          </p>
+          <p className="text-[11px] sm:text-xs font-semibold tracking-[0.3em] text-amber-200/80">OUR MANIFESTO</p>
           <h2
             className="mt-6 font-black tracking-tight text-white whitespace-nowrap"
             style={{ fontSize: 'min(3rem, calc((100vw - 2rem) / 17.5))' }}
@@ -113,14 +114,13 @@ export const LPView: React.FC<LPViewProps> = ({ onNavigate, onEnterSalon }) => {
           <div className="flex items-center gap-3">
             <span className="font-bold text-stone-900 tracking-wider text-sm whitespace-nowrap">{SITE_NAME}</span>
             <span className="text-stone-300">·</span>
-            <span>© {COPYRIGHT_YEAR} {SITE_NAME} All rights reserved.</span>
+            <span>
+              © {COPYRIGHT_YEAR} {SITE_NAME} All rights reserved.
+            </span>
           </div>
 
           <div className="flex items-center gap-4">
-            <button
-              onClick={onEnterSalon}
-              className="hover:text-stone-900 transition-colors cursor-pointer"
-            >
+            <button onClick={onEnterSalon} className="hover:text-stone-900 transition-colors cursor-pointer">
               サロンタイムラインを見る
             </button>
             <span className="text-stone-300">|</span>

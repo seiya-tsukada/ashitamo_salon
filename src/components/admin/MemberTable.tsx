@@ -28,9 +28,7 @@ export const MemberTable: React.FC<MemberTableProps> = ({ members, onRetryPaymen
     <section className="rounded-2xl bg-white border border-stone-200 shadow-sm p-6 sm:p-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-stone-100">
         <div>
-          <h2 className="text-lg font-bold text-stone-900">
-            会員ステータス管理
-          </h2>
+          <h2 className="text-lg font-bold text-stone-900">会員ステータス管理</h2>
           <p className="mt-1 text-xs text-stone-600">
             参加メンバーの課金状態、所属プロジェクト、アカウント稼働状況の一覧。
           </p>
@@ -90,9 +88,7 @@ export const MemberTable: React.FC<MemberTableProps> = ({ members, onRetryPaymen
                     <div>
                       <div className="font-semibold text-stone-900 flex items-center gap-1.5">
                         <span>{member.name}</span>
-                        <span className="text-[10px] font-mono text-stone-400">
-                          {member.id}
-                        </span>
+                        <span className="text-[10px] font-mono text-stone-400">{member.id}</span>
                       </div>
                       <div className="text-[11px] text-stone-500">
                         {member.email} · {member.role}
@@ -101,13 +97,9 @@ export const MemberTable: React.FC<MemberTableProps> = ({ members, onRetryPaymen
                   </div>
                 </td>
 
-                <td className="py-3.5 px-4 font-mono text-stone-700">
-                  {member.monthlyPlan}
-                </td>
+                <td className="py-3.5 px-4 font-mono text-stone-700">{member.monthlyPlan}</td>
 
-                <td className="py-3.5 px-4 font-mono text-stone-500 tabular-nums">
-                  {member.joinedAt}
-                </td>
+                <td className="py-3.5 px-4 font-mono text-stone-500 tabular-nums">{member.joinedAt}</td>
 
                 <td className="py-3.5 px-4 text-center font-mono tabular-nums text-stone-800">
                   <span className="font-bold">{member.activeProjects}</span> 案件

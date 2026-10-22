@@ -108,12 +108,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onEnter
                   className="w-8 h-8 rounded-full border border-stone-300 object-cover shadow-xs"
                 />
                 <div className="hidden sm:flex flex-col text-left">
-                  <span className="text-xs font-semibold text-stone-900 leading-none">
-                    {CURRENT_USER.displayName}
-                  </span>
-                  <span className="text-[10px] text-amber-700 font-medium mt-0.5">
-                    {CURRENT_USER.planLabel}
-                  </span>
+                  <span className="text-xs font-semibold text-stone-900 leading-none">{CURRENT_USER.displayName}</span>
+                  <span className="text-[10px] text-amber-700 font-medium mt-0.5">{CURRENT_USER.planLabel}</span>
                 </div>
               </div>
             </div>

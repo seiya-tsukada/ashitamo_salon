@@ -19,22 +19,45 @@ export const INITIAL_PROJECTS: ProjectItem[] = [
     tags: ['出版企画', 'デザイン', '編集', 'クラファン連動'],
     bannerImage: IMAGES.publishing,
     fullContent: {
-      background: 'デジタル全盛の時代だからこそ、「手元に残したい究極の1冊」をみんなで創る価値がある。既存の大手取次や書店流通のルールに縛られず、サロンメンバー自らが取材し、執筆し、デザインし、印刷立ち会いまで行う実験的出版プロジェクトです。初版部数は限定3,000部。すでに先行クラファンで1,200万円の支援を獲得しています。',
-      purpose: '単なる情報伝達ではなく、手に取った読者が「自分も表現者になりたい」と温かな勇気を覚えるような媒体を世に放つこと。',
+      background:
+        'デジタル全盛の時代だからこそ、「手元に残したい究極の1冊」をみんなで創る価値がある。既存の大手取次や書店流通のルールに縛られず、サロンメンバー自らが取材し、執筆し、デザインし、印刷立ち会いまで行う実験的出版プロジェクトです。初版部数は限定3,000部。すでに先行クラファンで1,200万円の支援を獲得しています。',
+      purpose:
+        '単なる情報伝達ではなく、手に取った読者が「自分も表現者になりたい」と温かな勇気を覚えるような媒体を世に放つこと。',
       rolesNeeded: [
-        { role: '特集記事ライター・インタビュアー', count: '2名', description: '起業家・現代アーティストへの独占取材、心に響くルポルタージュの執筆', filled: true },
-        { role: 'InDesign / エディトリアルデザイナー', count: '2名', description: '温かみのある誌面レイアウト設計、タイポグラフィ制作', filled: false },
-        { role: '校閲・進行管理（デスク）', count: '1名', description: '原稿事実確認、印刷所との入稿スケジュール管理', filled: true },
-        { role: 'SNSローンチ・プロモーション担当', count: '1名', description: 'X / Instagram / ショート動画での発売告知キャンペーン設計', filled: false }
+        {
+          role: '特集記事ライター・インタビュアー',
+          count: '2名',
+          description: '起業家・現代アーティストへの独占取材、心に響くルポルタージュの執筆',
+          filled: true,
+        },
+        {
+          role: 'InDesign / エディトリアルデザイナー',
+          count: '2名',
+          description: '温かみのある誌面レイアウト設計、タイポグラフィ制作',
+          filled: false,
+        },
+        {
+          role: '校閲・進行管理（デスク）',
+          count: '1名',
+          description: '原稿事実確認、印刷所との入稿スケジュール管理',
+          filled: true,
+        },
+        {
+          role: 'SNSローンチ・プロモーション担当',
+          count: '1名',
+          description: 'X / Instagram / ショート動画での発売告知キャンペーン設計',
+          filled: false,
+        },
       ],
       schedule: [
         '10月下旬：編集会議キックオフ & 企画コンテ決定',
         '11月中旬：全取材完了 & 初稿アップ',
         '11月下旬：DTPレイアウト組み & 第一回校正',
         '12月上旬：印刷立ち会い（都内特殊印刷所）',
-        '12月中旬：サロン限定先行発送 & 出版記念トークライブ'
+        '12月中旬：サロン限定先行発送 & 出版記念トークライブ',
       ],
-      resources: '制作予算：約¥3,500,000（印刷製本費・取材実費全額負担）。参加メンバーには巻末クレジット記載および特装版を無償支給。'
+      resources:
+        '制作予算：約¥3,500,000（印刷製本費・取材実費全額負担）。参加メンバーには巻末クレジット記載および特装版を無償支給。',
     },
     comments: [
       {
@@ -42,29 +65,32 @@ export const INITIAL_PROJECTS: ProjectItem[] = [
         author: '神谷 怜（Rei Kamiya）',
         authorRole: 'UI/エディトリアルデザイナー',
         authorAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
-        content: 'エディトリアルデザイン枠に立候補します！普段はWebメインですが、以前リトルプレスの装丁を手掛けた経験があります。温かみのある手触りの紙（ヴァンヌーボ等）や特色インクの選定も含めて提案させてください！',
+        content:
+          'エディトリアルデザイン枠に立候補します！普段はWebメインですが、以前リトルプレスの装丁を手掛けた経験があります。温かみのある手触りの紙（ヴァンヌーボ等）や特色インクの選定も含めて提案させてください！',
         createdAt: '1時間前',
-        likes: 7
+        likes: 7,
       },
       {
         id: 'c-2',
         author: '箕崎 駿（Shun Misaki）',
         authorRole: 'アシタモハレルヤ 主宰 / 編集長',
         authorAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
-        content: '神谷さん、ありがとうございます！温かみのある紙の風合い、まさにこの本にぴったりです。今週木曜21:00の第1回オンライン編集会議でお話ししましょう。枠確保します！',
+        content:
+          '神谷さん、ありがとうございます！温かみのある紙の風合い、まさにこの本にぴったりです。今週木曜21:00の第1回オンライン編集会議でお話ししましょう。枠確保します！',
         createdAt: '45分前',
-        likes: 4
+        likes: 4,
       },
       {
         id: 'c-3',
         author: '高橋 奈央（Nao Takahashi）',
         authorRole: 'フリーランスライター',
         authorAvatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80',
-        content: 'ライター枠で参加したいです。「好きな場所で心豊かに働く」をテーマに、地方移住した若手クリエイター3名への連続取材企画を温めていました。企画書を今夜スレッドにアップします！',
+        content:
+          'ライター枠で参加したいです。「好きな場所で心豊かに働く」をテーマに、地方移住した若手クリエイター3名への連続取材企画を温めていました。企画書を今夜スレッドにアップします！',
         createdAt: '20分前',
-        likes: 5
-      }
-    ]
+        likes: 5,
+      },
+    ],
   },
   {
     id: 'proj-02',
@@ -83,19 +109,36 @@ export const INITIAL_PROJECTS: ProjectItem[] = [
     tags: ['ハードウェア', '工業デザイン', '3Dプリンタ', 'IoT'],
     bannerImage: IMAGES.product,
     fullContent: {
-      background: '手で触れる「心地よい質感」と「重み」を持つガジェットが日々のクリエイティビティを支える。木目や陶器のような自然な手触りと、精密な操作感を両立したクリエイター専用の触覚インターフェースを開発しています。',
-      purpose: '量産試作ライン立ち上げ前の、最終プロトタイプ検証。Kickstarterでのグローバルローンチを視野に入れています。',
+      background:
+        '手で触れる「心地よい質感」と「重み」を持つガジェットが日々のクリエイティビティを支える。木目や陶器のような自然な手触りと、精密な操作感を両立したクリエイター専用の触覚インターフェースを開発しています。',
+      purpose:
+        '量産試作ライン立ち上げ前の、最終プロトタイプ検証。Kickstarterでのグローバルローンチを視野に入れています。',
       rolesNeeded: [
-        { role: '3D CAD / 工業製品サーフェスモデラー', count: '1名', description: 'Fusion360でのフィレット調整・内部基板クリアランス設計', filled: true },
-        { role: 'C言語 / 組込みファームウェアエンジニア', count: '1名', description: 'ESP32マイコン制御、BLE通信レイテンシ最適化', filled: true },
-        { role: 'パッケージング & 開封体験グラフィック', count: '2名', description: '温かみのあるクラフト化粧箱の設計、マニュアルのミニマルデザイン', filled: false }
+        {
+          role: '3D CAD / 工業製品サーフェスモデラー',
+          count: '1名',
+          description: 'Fusion360でのフィレット調整・内部基板クリアランス設計',
+          filled: true,
+        },
+        {
+          role: 'C言語 / 組込みファームウェアエンジニア',
+          count: '1名',
+          description: 'ESP32マイコン制御、BLE通信レイテンシ最適化',
+          filled: true,
+        },
+        {
+          role: 'パッケージング & 開封体験グラフィック',
+          count: '2名',
+          description: '温かみのあるクラフト化粧箱の設計、マニュアルのミニマルデザイン',
+          filled: false,
+        },
       ],
       schedule: [
         '11月上旬：第3世代外装の試作出力',
         '11月中旬：基板組み込み & 操作感テスト',
-        '12月上旬：クラウドファンディング用動画撮影'
+        '12月上旬：クラウドファンディング用動画撮影',
       ],
-      resources: 'プロトタイプ用ラボ機材（光造形プリンタ、CNC切削機）利用可能。部材費支給あり。'
+      resources: 'プロトタイプ用ラボ機材（光造形プリンタ、CNC切削機）利用可能。部材費支給あり。',
     },
     comments: [
       {
@@ -103,20 +146,22 @@ export const INITIAL_PROJECTS: ProjectItem[] = [
         author: '工藤 勇気（Yuki Kudo）',
         authorRole: 'パッケージデザイナー',
         authorAvatar: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=200&q=80',
-        content: 'パッケージングの開封体験、ぜひ担当させてください！自然な風合いの厚紙を折り構造だけで仕立てる、環境に優しく開けた瞬間にワクワクするパッケージを試作できます。',
+        content:
+          'パッケージングの開封体験、ぜひ担当させてください！自然な風合いの厚紙を折り構造だけで仕立てる、環境に優しく開けた瞬間にワクワクするパッケージを試作できます。',
         createdAt: '3時間前',
-        likes: 6
+        likes: 6,
       },
       {
         id: 'c-5',
         author: '本間 創（So Homma）',
         authorRole: 'ハードウェアエンジニア / Maker',
         authorAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
-        content: '工藤さん！自然素材の折り構造、プロダクトの思想と完全に一致しています。基板サンプルの寸法データをDMでお送りします！',
+        content:
+          '工藤さん！自然素材の折り構造、プロダクトの思想と完全に一致しています。基板サンプルの寸法データをDMでお送りします！',
         createdAt: '2時間前',
-        likes: 3
-      }
-    ]
+        likes: 3,
+      },
+    ],
   },
   {
     id: 'proj-03',
@@ -135,19 +180,35 @@ export const INITIAL_PROJECTS: ProjectItem[] = [
     tags: ['リアルイベント', '地方創生', '空間デザイン', '飲食プロデュース'],
     bannerImage: IMAGES.festival,
     fullContent: {
-      background: 'オンラインのつながりを、リアルなあたたかい「出会いと共創の現場」に昇華させる年間最大フェス。参加者全員が観客ではなく仲間であり表現者。地方自治体とタッグを組み、過疎化が進む地域の廃校を2日間限定のあたたかい文化祭へ変貌させます。',
+      background:
+        'オンラインのつながりを、リアルなあたたかい「出会いと共創の現場」に昇華させる年間最大フェス。参加者全員が観客ではなく仲間であり表現者。地方自治体とタッグを組み、過疎化が進む地域の廃校を2日間限定のあたたかい文化祭へ変貌させます。',
       purpose: '地域の人々とサロンメンバーが笑顔で交わる新しい地方創生モデルを作り、息の長い関係性を育てること。',
       rolesNeeded: [
-        { role: '空間演出・あかりのライティングディレクション', count: '2名', description: '校庭のあたたかなランタン設置、木製ステージのライティング設計', filled: true },
-        { role: 'フード & クラフト飲食プロデュース', count: '2名', description: '地元農家の野菜を使ったあったかスープやクラフトビール開発', filled: true },
-        { role: '会場設営 & ほのぼのワークショップ運営', count: '2名', description: '子どもから大人まで楽しめる参加型クラフト体験の進行', filled: false }
+        {
+          role: '空間演出・あかりのライティングディレクション',
+          count: '2名',
+          description: '校庭のあたたかなランタン設置、木製ステージのライティング設計',
+          filled: true,
+        },
+        {
+          role: 'フード & クラフト飲食プロデュース',
+          count: '2名',
+          description: '地元農家の野菜を使ったあったかスープやクラフトビール開発',
+          filled: true,
+        },
+        {
+          role: '会場設営 & ほのぼのワークショップ運営',
+          count: '2名',
+          description: '子どもから大人まで楽しめる参加型クラフト体験の進行',
+          filled: false,
+        },
       ],
       schedule: [
         '11月中旬：現地ロケハン & 地域の方々との顔合わせ交流会',
         '12月上旬：出店ブース・ステージタイムテーブル発表',
-        '1月中旬：フェス本番（金曜夜前夜祭〜日曜夕方）'
+        '1月中旬：フェス本番（金曜夜前夜祭〜日曜夕方）',
       ],
-      resources: 'イベント全体予算：¥8,000,000。交通費・現地宿泊費はサロン運営より全額補助。'
+      resources: 'イベント全体予算：¥8,000,000。交通費・現地宿泊費はサロン運営より全額補助。',
     },
     comments: [
       {
@@ -155,11 +216,12 @@ export const INITIAL_PROJECTS: ProjectItem[] = [
         author: '森田 健一（Kenichi Morita）',
         authorRole: 'イベントディレクター',
         authorAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80',
-        content: '会場設営と動線設計、担当可能です！地域の木材を活用した温かみのあるブース作りを提案したいです。安全管理マニュアルと電源プランの草案を引きます。',
+        content:
+          '会場設営と動線設計、担当可能です！地域の木材を活用した温かみのあるブース作りを提案したいです。安全管理マニュアルと電源プランの草案を引きます。',
         createdAt: '18時間前',
-        likes: 9
-      }
-    ]
+        likes: 9,
+      },
+    ],
   },
   {
     id: 'proj-04',
@@ -177,15 +239,19 @@ export const INITIAL_PROJECTS: ProjectItem[] = [
     currentMembers: 14,
     tags: ['週末放談', 'キャリア', '温かな働き方', 'インディーズ'],
     fullContent: {
-      background: '忙しい日常の中で、失敗談やボツ企画もクスッと笑い合える温かな居場所をつくりたいという思いから生まれたスレッドです。お気に入りの飲み物片手に気軽に参加してください。',
+      background:
+        '忙しい日常の中で、失敗談やボツ企画もクスッと笑い合える温かな居場所をつくりたいという思いから生まれたスレッドです。お気に入りの飲み物片手に気軽に参加してください。',
       purpose: '肩肘張らずに応援し合える、あたたかく優しい壁打ちコミュニティをつくること。',
       rolesNeeded: [
-        { role: 'リスナー & 語り手', count: '無制限', description: '金曜21:30〜まったりオンラインで話しましょう', filled: false }
+        {
+          role: 'リスナー & 語り手',
+          count: '無制限',
+          description: '金曜21:30〜まったりオンラインで話しましょう',
+          filled: false,
+        },
       ],
-      schedule: [
-        '毎週金曜 21:30〜23:00：オンラインボイスチャット（途中入退室自由）'
-      ],
-      resources: '自由参加。事前予約不要。'
+      schedule: ['毎週金曜 21:30〜23:00：オンラインボイスチャット（途中入退室自由）'],
+      resources: '自由参加。事前予約不要。',
     },
     comments: [
       {
@@ -193,12 +259,13 @@ export const INITIAL_PROJECTS: ProjectItem[] = [
         author: '千葉 大輔（Daisuke Chiba）',
         authorRole: 'モーショングラフィックス',
         authorAvatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=200&q=80',
-        content: '前回の「手描きアニメーションの温もり」の話、心がほっこりしました。今週は制作途中の温かい短編のラフを持って遊びに行きます！',
+        content:
+          '前回の「手描きアニメーションの温もり」の話、心がほっこりしました。今週は制作途中の温かい短編のラフを持って遊びに行きます！',
         createdAt: '1日前',
-        likes: 5
-      }
-    ]
-  }
+        likes: 5,
+      },
+    ],
+  },
 ];
 
 export const MOCK_MEMBERS: MemberItem[] = [
@@ -211,7 +278,7 @@ export const MOCK_MEMBERS: MemberItem[] = [
     joinedAt: '2026/01/15',
     activeProjects: 3,
     status: 'アクティブ',
-    monthlyPlan: '月額 1,000円'
+    monthlyPlan: '月額 1,000円',
   },
   {
     id: 'MEM-002',
@@ -222,7 +289,7 @@ export const MOCK_MEMBERS: MemberItem[] = [
     joinedAt: '2026/02/01',
     activeProjects: 2,
     status: 'アクティブ',
-    monthlyPlan: '月額 1,000円'
+    monthlyPlan: '月額 1,000円',
   },
   {
     id: 'MEM-003',
@@ -233,7 +300,7 @@ export const MOCK_MEMBERS: MemberItem[] = [
     joinedAt: '2026/03/10',
     activeProjects: 1,
     status: '決済エラー',
-    monthlyPlan: '月額 1,000円'
+    monthlyPlan: '月額 1,000円',
   },
   {
     id: 'MEM-004',
@@ -244,7 +311,7 @@ export const MOCK_MEMBERS: MemberItem[] = [
     joinedAt: '2026/04/05',
     activeProjects: 0,
     status: '休会中',
-    monthlyPlan: '月額 1,000円'
+    monthlyPlan: '月額 1,000円',
   },
   {
     id: 'MEM-005',
@@ -255,7 +322,7 @@ export const MOCK_MEMBERS: MemberItem[] = [
     joinedAt: '2026/10/16',
     activeProjects: 1,
     status: '新規',
-    monthlyPlan: '月額 1,000円'
+    monthlyPlan: '月額 1,000円',
   },
   {
     id: 'MEM-006',
@@ -266,8 +333,8 @@ export const MOCK_MEMBERS: MemberItem[] = [
     joinedAt: '2026/02/18',
     activeProjects: 2,
     status: 'アクティブ',
-    monthlyPlan: '月額 1,000円'
-  }
+    monthlyPlan: '月額 1,000円',
+  },
 ];
 
 export const MOCK_REPORTS: ReportItem[] = [
@@ -279,7 +346,7 @@ export const MOCK_REPORTS: ReportItem[] = [
     reporterUser: '神谷 怜',
     reason: 'サロン規約第8条違反：無許可の副業商材セミナーへの外部誘導URLの投稿',
     timestamp: '2026/10/18 19:42',
-    severity: '高'
+    severity: '高',
   },
   {
     id: 'REP-102',
@@ -289,7 +356,7 @@ export const MOCK_REPORTS: ReportItem[] = [
     reporterUser: '本間 創',
     reason: 'サロン規約第5条違反：サロン内の温かい信頼関係を利用した不当な中抜き下請け斡旋',
     timestamp: '2026/10/18 16:15',
-    severity: '高'
+    severity: '高',
   },
   {
     id: 'REP-103',
@@ -299,6 +366,6 @@ export const MOCK_REPORTS: ReportItem[] = [
     reporterUser: '千葉 大輔',
     reason: '特定の個人メンバーに対する威圧的かつ執拗な中傷発言',
     timestamp: '2026/10/17 23:10',
-    severity: '中'
-  }
+    severity: '中',
+  },
 ];
