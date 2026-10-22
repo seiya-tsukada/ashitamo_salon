@@ -1,6 +1,9 @@
 import React from 'react';
-import { PageType } from '../types';
-import { LayoutDashboard, Sparkles, Shield, ArrowLeft } from 'lucide-react';
+import { PageType } from '../../types';
+import { LayoutDashboard } from 'lucide-react';
+import { SITE_NAME, SITE_SUBTITLE } from '../../constants/site';
+import { CURRENT_USER } from '../../constants/currentUser';
+import { Button } from '../ui/Button';
 
 interface NavbarProps {
   currentPage: PageType;
@@ -12,7 +15,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onEnter
   return (
     <header className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-stone-200/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-        {/* Zone 1: Brand Wordmark */}
+        {/* Brand */}
         <div className="flex items-center gap-3">
           <button
             onClick={() => onNavigate(currentPage === 'admin' ? 'home' : 'lp')}
@@ -23,10 +26,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onEnter
             </div>
             <div className="hidden sm:flex flex-col">
               <span className="font-extrabold text-base tracking-tight whitespace-nowrap text-stone-900 group-hover:text-orange-600 transition-colors">
-                アシタモハレルヤ
+                {SITE_NAME}
               </span>
               <span className="text-[10px] font-mono text-stone-500 tracking-wider -mt-1 hidden sm:block">
-                COMMUNITY SALON
+                {SITE_SUBTITLE}
               </span>
             </div>
           </button>
@@ -38,9 +41,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onEnter
           )}
         </div>
 
-        {/* Zone 2: Navigation Links / View Switchers */}
+        {/* Page switcher */}
         <nav className="flex items-center gap-1 sm:gap-2">
-          {/* Quick Page View Switcher */}
           <div className="flex items-center p-1 bg-stone-100 border border-stone-200 rounded-xl text-xs whitespace-nowrap">
             <button
               onClick={() => onNavigate('lp')}
@@ -75,18 +77,18 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onEnter
           </div>
         </nav>
 
-        {/* Zone 3: User Profile & Admin Toggle */}
+        {/* Right side: CTA on LP, user info elsewhere */}
         <div className="flex items-center gap-3">
           {currentPage === 'lp' ? (
-            <button
+            <Button
+              variant="gradient"
               onClick={onEnterSalon}
-              className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 rounded-lg shadow-sm transition-all cursor-pointer whitespace-nowrap"
+              className="px-3 sm:px-4 py-2 text-xs sm:text-sm rounded-lg shadow-sm whitespace-nowrap"
             >
               サロンに入る
-            </button>
+            </Button>
           ) : (
             <div className="flex items-center gap-3">
-              {/* Admin Switcher */}
               <button
                 onClick={() => onNavigate(currentPage === 'admin' ? 'home' : 'admin')}
                 className={`hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-all cursor-pointer ${
@@ -99,20 +101,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onEnter
                 <span>{currentPage === 'admin' ? '← サロンに戻る' : '/admin 管理者へ'}</span>
               </button>
 
-              {/* User Profile */}
               <div className="flex items-center gap-2 pl-2 border-l border-stone-200">
                 <img
-                  src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80"
-                  alt="佐藤 匠"
+                  src={CURRENT_USER.avatarThumb}
+                  alt={CURRENT_USER.displayName}
                   className="w-8 h-8 rounded-full border border-stone-300 object-cover shadow-xs"
                 />
                 <div className="hidden sm:flex flex-col text-left">
-                  <span className="text-xs font-semibold text-stone-900 leading-none">
-                    佐藤 匠
-                  </span>
-                  <span className="text-[10px] text-amber-700 font-medium mt-0.5">
-                    Pro Member
-                  </span>
+                  <span className="text-xs font-semibold text-stone-900 leading-none">{CURRENT_USER.displayName}</span>
+                  <span className="text-[10px] text-amber-700 font-medium mt-0.5">{CURRENT_USER.planLabel}</span>
                 </div>
               </div>
             </div>
