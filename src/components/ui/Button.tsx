@@ -13,7 +13,7 @@ const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   light:
     'inline-flex items-center justify-center gap-3 rounded-full bg-white text-stone-900 font-bold hover:bg-amber-50 transition-colors cursor-pointer',
   // Dark pill used in the signup flow
-  dark: 'inline-flex items-center justify-center gap-2 rounded-full bg-stone-900 text-white text-sm font-bold hover:bg-stone-700 transition-colors cursor-pointer',
+  dark: 'inline-flex items-center justify-center gap-2 rounded-full bg-stone-900 text-white text-sm font-bold hover:bg-stone-700 transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-wait',
 };
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

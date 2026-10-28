@@ -9,3 +9,26 @@ export const Field: React.FC<{ label: string; children: React.ReactNode }> = ({ 
     {children}
   </label>
 );
+
+export const FormError: React.FC<{ message: string }> = ({ message }) => (
+  <p role="alert" className="px-4 py-3 rounded-xl bg-rose-50 border border-rose-200 text-xs font-medium text-rose-700">
+    {message}
+  </p>
+);
+
+export const SwitchModeLink: React.FC<{ prompt: string; label: string; onClick: () => void }> = ({
+  prompt,
+  label,
+  onClick,
+}) => (
+  <p className="text-center text-xs text-stone-500">
+    {prompt}
+    <button
+      type="button"
+      onClick={onClick}
+      className="ml-1 font-semibold text-stone-900 underline underline-offset-2 hover:text-orange-600 cursor-pointer"
+    >
+      {label}
+    </button>
+  </p>
+);

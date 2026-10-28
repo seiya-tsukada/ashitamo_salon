@@ -2,7 +2,7 @@ import { MemberStatus } from '../types';
 
 export const TOAST_DURATION_MS = 3500;
 
-export type MemberStatusFilter = 'すべて' | Exclude<MemberStatus, '新規'>;
+export type MemberStatusFilter = 'すべて' | Exclude<MemberStatus, '新規' | '退会'>;
 
 export const MEMBER_STATUS_FILTERS: readonly MemberStatusFilter[] = ['すべて', 'アクティブ', '決済エラー', '休会中'];
 
@@ -11,6 +11,7 @@ export const MEMBER_STATUS_STYLES: Record<MemberStatus, { badge: string; dot: st
   決済エラー: { badge: 'bg-rose-50 text-rose-700 border-rose-200', dot: 'bg-rose-500' },
   休会中: { badge: 'bg-stone-100 text-stone-600 border-stone-200', dot: 'bg-stone-400' },
   新規: { badge: 'bg-sky-50 text-sky-700 border-sky-200', dot: 'bg-sky-500' },
+  退会: { badge: 'bg-stone-50 text-stone-400 border-stone-200', dot: 'bg-stone-300' },
 };
 
 // Static KPI figures for the dashboard mock

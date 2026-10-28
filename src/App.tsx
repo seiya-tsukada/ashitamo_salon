@@ -2,7 +2,11 @@ import { useState, useEffect, useCallback } from 'react';
 import { PageType, ProjectItem, CommentItem, MemberItem, MemberStatus, ReportItem } from './types';
 import { INITIAL_PROJECTS, MOCK_MEMBERS, MOCK_REPORTS } from './data/mockData';
 import { DEFAULT_PROJECT_ID, PAGE_PATHS } from './constants/routes';
-import { MEMBER_STORAGE_KEY } from './constants/storage';
+import { MEMBER_STATUS_TO_SUBSCRIPTION, canEnterSalon } from './constants/billing';
+import { MOCK_SALON_PASS_STORAGE_KEY } from './constants/storage';
+import { useAuth } from './hooks/useAuth';
+import { adminListMembers, adminSetSubscriptionStatus } from './lib/auth';
+import { toMemberItem } from './utils/member';
 import { resolvePageFromLocation } from './utils/routing';
 import { Navbar } from './components/layout/Navbar';
 import { LPView } from './components/lp/LPView';
@@ -23,15 +27,28 @@ export default function App() {
   const [members, setMembers] = useState<MemberItem[]>(MOCK_MEMBERS);
   const [reports, setReports] = useState<ReportItem[]>(MOCK_REPORTS);
 
-  // Mock membership flag (persisted per browser so the signup modal is shown only once)
-  const [isMember, setIsMember] = useState<boolean>(() => {
+  const auth = useAuth();
+  const isAdmin = auth.user?.role === 'admin';
+  const subscriptionStatus = auth.user?.subscription.status;
+  // Payment is still a mock: finishing it (persisted) or skipping it (this visit only) also opens the gate
+  const [hasMockPass, setHasMockPass] = useState<boolean>(() => {
     try {
-      return window.localStorage.getItem(MEMBER_STORAGE_KEY) === 'true';
+      return window.localStorage.getItem(MOCK_SALON_PASS_STORAGE_KEY) === 'true';
     } catch {
       return false;
     }
   });
-  const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const isSalonOpen = canEnterSalon(subscriptionStatus) || hasMockPass;
+  const isSalonPage = currentPage === 'home' || currentPage === 'detail';
+  const [signupStep, setSignupStep] = useState<'login' | 'account' | 'payment' | null>(null);
+
+  // Admins see real members from the DB; everyone else keeps the mock list
+  useEffect(() => {
+    if (currentPage !== 'admin' || !isAdmin) return;
+    adminListMembers()
+      .then((users) => setMembers(users.map(toMemberItem)))
+      .catch((err) => console.error('Failed to load members:', err));
+  }, [currentPage, isAdmin]);
 
   // Sync with browser back/forward buttons
   useEffect(() => {
@@ -40,7 +57,16 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  const handleNavigate = (page: PageType) => {
+  // The salon gate: logged-in members without an active subscription go to payment, everyone else signs up
+  const gateStep = auth.user ? 'payment' : 'account';
+  const openSalonGate = () => setSignupStep(gateStep);
+
+  // Landing on a salon URL directly (or via back/forward) shows the LP with the gate open instead
+  const isGated = !auth.isRestoring && isSalonPage && !isSalonOpen;
+  const modalStep = signupStep ?? (isGated ? gateStep : null);
+
+  // Unchecked navigation, for callers that have just opened the gate themselves
+  const goTo = useCallback((page: PageType) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     try {
@@ -49,34 +75,57 @@ export default function App() {
       // pushState can throw in restricted contexts; navigation still works without URL sync
       console.warn('History pushState fallback:', err);
     }
+  }, []);
+
+  const handleNavigate = (page: PageType) => {
+    if ((page === 'home' || page === 'detail') && !isSalonOpen) {
+      openSalonGate();
+      return;
+    }
+    goTo(page);
   };
 
-  // Entry point to the salon: members go straight in, others sign up first
-  const handleEnterSalon = () => {
-    if (isMember) {
-      handleNavigate('home');
-    } else {
-      setIsSignupOpen(true);
-    }
-  };
+  const handleEnterSalon = () => handleNavigate('home');
 
   // Stable reference so the modal's Escape/scroll-lock effect doesn't re-run on every render
-  const handleSignupClose = useCallback(() => setIsSignupOpen(false), []);
+  const handleSignupClose = useCallback(() => {
+    setSignupStep(null);
+    if (isGated) goTo('lp');
+  }, [isGated, goTo]);
 
   const handleSignupComplete = () => {
-    setIsMember(true);
+    setHasMockPass(true);
     try {
-      window.localStorage.setItem(MEMBER_STORAGE_KEY, 'true');
+      window.localStorage.setItem(MOCK_SALON_PASS_STORAGE_KEY, 'true');
     } catch {
-      // Storage unavailable: membership lasts for this session only
+      // Storage unavailable: the pass lasts for this visit only
     }
-    setIsSignupOpen(false);
-    handleNavigate('home');
+    setSignupStep(null);
+    goTo('home');
+  };
+
+  const handleSignupEnter = () => {
+    setSignupStep(null);
+    goTo('home');
   };
 
   const handleSignupSkip = () => {
-    setIsSignupOpen(false);
-    handleNavigate('home');
+    setHasMockPass(true);
+    setSignupStep(null);
+    goTo('home');
+  };
+
+  const handleLogout = async () => {
+    // Leave the salon first so the gate doesn't fire for the now logged-out visitor
+    goTo('lp');
+    setHasMockPass(false);
+    try {
+      window.localStorage.removeItem(MOCK_SALON_PASS_STORAGE_KEY);
+    } catch {
+      // Nothing to clear
+    }
+    setMembers(MOCK_MEMBERS);
+    await auth.signOut();
   };
 
   const handleSelectProject = (projectId: string) => {
@@ -113,8 +162,19 @@ export default function App() {
     setReports((prev) => prev.filter((r) => r.id !== reportId));
   };
 
-  const handleUpdateMemberStatus = (memberId: string, newStatus: MemberStatus) => {
-    setMembers((prev) => prev.map((m) => (m.id === memberId ? { ...m, status: newStatus } : m)));
+  const handleUpdateMemberStatus = async (memberId: string, newStatus: MemberStatus) => {
+    if (!isAdmin) {
+      setMembers((prev) => prev.map((m) => (m.id === memberId ? { ...m, status: newStatus } : m)));
+      return;
+    }
+    try {
+      const updated = toMemberItem(
+        await adminSetSubscriptionStatus(memberId, MEMBER_STATUS_TO_SUBSCRIPTION[newStatus]),
+      );
+      setMembers((prev) => prev.map((m) => (m.id === memberId ? updated : m)));
+    } catch (err) {
+      window.alert(err instanceof Error ? err.message : String(err));
+    }
   };
 
   // Find currently selected project or fallback to first
@@ -122,16 +182,23 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-stone-800 flex flex-col font-sans selection:bg-amber-200 selection:text-stone-900">
-      <Navbar currentPage={currentPage} onNavigate={handleNavigate} onEnterSalon={handleEnterSalon} />
+      <Navbar
+        currentPage={currentPage}
+        user={auth.user}
+        onNavigate={handleNavigate}
+        onEnterSalon={handleEnterSalon}
+        onLogin={() => setSignupStep('login')}
+        onLogout={handleLogout}
+      />
 
       <main className="flex-1">
-        {currentPage === 'lp' && <LPView onNavigate={handleNavigate} onEnterSalon={handleEnterSalon} />}
+        {(currentPage === 'lp' || isGated) && <LPView onNavigate={handleNavigate} onEnterSalon={handleEnterSalon} />}
 
-        {currentPage === 'home' && (
+        {currentPage === 'home' && isSalonOpen && (
           <HomeView projects={projects} onSelectProject={handleSelectProject} onCreateProject={handleCreateProject} />
         )}
 
-        {currentPage === 'detail' && (
+        {currentPage === 'detail' && isSalonOpen && (
           <DetailView project={currentProject} onBack={() => handleNavigate('home')} onAddComment={handleAddComment} />
         )}
 
@@ -147,8 +214,17 @@ export default function App() {
         )}
       </main>
 
-      {isSignupOpen && (
-        <SignupModal onClose={handleSignupClose} onComplete={handleSignupComplete} onSkip={handleSignupSkip} />
+      {modalStep && (
+        <SignupModal
+          initialStep={modalStep}
+          subscriptionStatus={subscriptionStatus}
+          onSignUp={auth.signUp}
+          onSignIn={auth.signIn}
+          onClose={handleSignupClose}
+          onComplete={handleSignupComplete}
+          onEnter={handleSignupEnter}
+          onSkip={handleSignupSkip}
+        />
       )}
     </div>
   );
