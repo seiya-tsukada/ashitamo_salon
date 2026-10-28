@@ -1,20 +1,49 @@
 import React, { useEffect, useState } from 'react';
 import { Check, X } from 'lucide-react';
 import { SITE_NAME } from '../../constants/site';
+import { GATE_NOTICES, IS_PAYMENT_MOCK, canEnterSalon } from '../../constants/billing';
 import { SignupStep } from '../../constants/signup';
+import { AuthUser, SubscriptionStatus } from '../../lib/auth';
 import { Button, ButtonArrow } from '../ui/Button';
 import { AccountStep } from './AccountStep';
+import { LoginStep } from './LoginStep';
 import { PaymentStep } from './PaymentStep';
 import { StepIndicator } from './StepIndicator';
 
 interface SignupModalProps {
+  initialStep: Exclude<SignupStep, 'done'>;
+  // Set when a logged-in member is stopped at the gate
+  subscriptionStatus?: SubscriptionStatus;
+  onSignUp: (email: string, password: string, displayName: string) => Promise<void>;
+  onSignIn: (email: string, password: string) => Promise<AuthUser>;
   onClose: () => void;
+  // Mock payment finished
   onComplete: () => void;
+  // Logged in as a member who can already enter
+  onEnter: () => void;
   onSkip: () => void;
 }
 
-export const SignupModal: React.FC<SignupModalProps> = ({ onClose, onComplete, onSkip }) => {
-  const [step, setStep] = useState<SignupStep>('account');
+export const SignupModal: React.FC<SignupModalProps> = ({
+  initialStep,
+  subscriptionStatus,
+  onSignUp,
+  onSignIn,
+  onClose,
+  onComplete,
+  onEnter,
+  onSkip,
+}) => {
+  const [step, setStep] = useState<SignupStep>(initialStep);
+
+  const handleSignIn = async (email: string, password: string) => {
+    const user = await onSignIn(email, password);
+    if (canEnterSalon(user.subscription.status)) {
+      onEnter();
+    } else {
+      setStep('payment');
+    }
+  };
 
   // Close on Escape and lock background scroll while open
   useEffect(() => {
@@ -43,12 +72,17 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose, onComplete, o
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-6 pt-5">
-          <button
-            onClick={onSkip}
-            className="px-3 py-1.5 rounded-full border border-dashed border-stone-300 text-[11px] font-semibold text-stone-500 hover:text-stone-900 hover:border-stone-500 transition-colors cursor-pointer"
-          >
-            スキップ（モック用）
-          </button>
+          {/* Mock only (payment not integrated yet): get past the salon gate without paying */}
+          {!IS_PAYMENT_MOCK ? (
+            <span />
+          ) : (
+            <button
+              onClick={onSkip}
+              className="px-3 py-1.5 rounded-full border border-dashed border-stone-300 text-[11px] font-semibold text-stone-500 hover:text-stone-900 hover:border-stone-500 transition-colors cursor-pointer"
+            >
+              スキップ（モック用）
+            </button>
+          )}
           <button
             onClick={onClose}
             aria-label="閉じる"
@@ -59,7 +93,16 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose, onComplete, o
         </div>
 
         <div className="px-6 pb-8 pt-4">
-          {step !== 'done' && (
+          {step === 'login' && (
+            <>
+              <h2 id="signup-title" className="text-2xl font-black tracking-tight text-stone-900">
+                ログイン
+              </h2>
+              <LoginStep onSignIn={handleSignIn} onSwitchToSignup={() => setStep('account')} />
+            </>
+          )}
+
+          {(step === 'account' || step === 'payment') && (
             <>
               <StepIndicator step={step} />
               <h2 id="signup-title" className="mt-6 text-2xl font-black tracking-tight text-stone-900">
@@ -68,9 +111,21 @@ export const SignupModal: React.FC<SignupModalProps> = ({ onClose, onComplete, o
             </>
           )}
 
-          {step === 'account' && <AccountStep onNext={() => setStep('payment')} />}
+          {step === 'account' && (
+            <AccountStep
+              onSignUp={onSignUp}
+              onNext={() => setStep('payment')}
+              onSwitchToLogin={() => setStep('login')}
+            />
+          )}
 
-          {step === 'payment' && <PaymentStep onSubmit={() => setStep('done')} onBack={() => setStep('account')} />}
+          {step === 'payment' && (
+            <PaymentStep
+              notice={subscriptionStatus && GATE_NOTICES[subscriptionStatus]}
+              onSubmit={() => setStep('done')}
+              onBack={subscriptionStatus ? undefined : () => setStep('account')}
+            />
+          )}
 
           {step === 'done' && (
             <div className="pt-6 text-center">

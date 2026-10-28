@@ -4,7 +4,7 @@ export type ProjectCategory = '公式' | '編集' | 'デザイン' | '雑談';
 
 export type CategoryType = 'すべて' | ProjectCategory;
 
-export type MemberStatus = 'アクティブ' | '決済エラー' | '休会中' | '新規';
+export type MemberStatus = 'アクティブ' | '決済エラー' | '休会中' | '新規' | '退会';
 
 export interface CommentItem {
   id: string;

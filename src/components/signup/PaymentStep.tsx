@@ -6,11 +6,13 @@ import { Button } from '../ui/Button';
 import { Field, INPUT_CLASS } from './Field';
 
 interface PaymentStepProps {
+  notice?: string;
   onSubmit: () => void;
-  onBack: () => void;
+  // Omitted for logged-in members stopped at the gate (there is no account step to go back to)
+  onBack?: () => void;
 }
 
-export const PaymentStep: React.FC<PaymentStepProps> = ({ onSubmit, onBack }) => {
+export const PaymentStep: React.FC<PaymentStepProps> = ({ notice, onSubmit, onBack }) => {
   // Mock only: no payment is actually processed
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,6 +21,11 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({ onSubmit, onBack }) =>
 
   return (
     <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+      {notice && (
+        <p className="px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-xs font-medium text-amber-900">
+          {notice}
+        </p>
+      )}
       <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-white border border-stone-200">
         <span className="text-sm font-semibold text-stone-900">{SITE_NAME} 月額プラン</span>
         <span className="text-sm font-bold text-stone-900">
@@ -54,13 +61,17 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({ onSubmit, onBack }) =>
         登録して支払う（{MONTHLY_FEE.label}）
       </Button>
       <div className="flex items-center justify-between text-xs">
-        <button
-          type="button"
-          onClick={onBack}
-          className="text-stone-500 hover:text-stone-900 transition-colors cursor-pointer"
-        >
-          ← 戻る
-        </button>
+        {onBack ? (
+          <button
+            type="button"
+            onClick={onBack}
+            className="text-stone-500 hover:text-stone-900 transition-colors cursor-pointer"
+          >
+            ← 戻る
+          </button>
+        ) : (
+          <span />
+        )}
         <span className="text-stone-400">※ モックのため実際の決済は行われません</span>
       </div>
     </form>

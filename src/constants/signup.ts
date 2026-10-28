@@ -1,6 +1,6 @@
-export type SignupStep = 'account' | 'payment' | 'done';
+export type SignupStep = 'login' | 'account' | 'payment' | 'done';
 
-export const SIGNUP_STEPS: { key: Exclude<SignupStep, 'done'>; label: string }[] = [
+export const SIGNUP_STEPS: { key: Exclude<SignupStep, 'login' | 'done'>; label: string }[] = [
   { key: 'account', label: 'アカウント登録' },
   { key: 'payment', label: 'お支払い' },
 ];

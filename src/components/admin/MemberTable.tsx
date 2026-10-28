@@ -79,12 +79,18 @@ export const MemberTable: React.FC<MemberTableProps> = ({ members, onRetryPaymen
               <tr key={member.id} className="hover:bg-stone-50 transition-colors">
                 <td className="py-3.5 px-4">
                   <div className="flex items-center gap-3">
-                    <img
-                      src={member.avatar}
-                      alt={member.name}
-                      className="w-8 h-8 rounded-full border border-stone-200 object-cover shadow-xs"
-                      referrerPolicy="no-referrer"
-                    />
+                    {member.avatar ? (
+                      <img
+                        src={member.avatar}
+                        alt={member.name}
+                        className="w-8 h-8 rounded-full border border-stone-200 object-cover shadow-xs"
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-stone-200 flex items-center justify-center text-xs font-bold text-stone-600">
+                        {member.name.slice(0, 1)}
+                      </div>
+                    )}
                     <div>
                       <div className="font-semibold text-stone-900 flex items-center gap-1.5">
                         <span>{member.name}</span>
