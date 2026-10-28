@@ -7,6 +7,5 @@ export const resolvePageFromLocation = (): PageType => {
   const { pathname: path, hash } = window.location;
   if (isAdminLocation(path, hash)) return 'admin';
   if (path === '/home' || hash === '#home') return 'home';
-  if (path === '/detail' || hash === '#detail') return 'detail';
   return 'lp';
 };

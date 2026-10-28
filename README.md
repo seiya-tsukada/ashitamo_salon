@@ -3,11 +3,10 @@
 仲間と一緒にプロジェクトを仕掛けるオンラインサロンの MVP フロントエンドです。
 
 - LP（`/`）
-- プロジェクト・タイムライン（`/home`）
-- 企画詳細・提案スレッド（`/detail`）
+- サロン（`/home`）: チャンネル型のチャットと、タイトル付きで会話できるトピック（未完了 / 完了）
 - 運営管理ダッシュボード（`/admin`）
 
-ログインと課金ステータスは Supabase（Postgres）で管理します。プロジェクトや投稿などその他のデータはモック（`src/data`）で、実際の決済処理はまだありません。
+ログインと課金ステータスは Supabase（Postgres）で管理します。チャットやトピックなどその他のデータはモック（`src/data`）で、実際の決済処理はまだありません。
 
 ## 開発
 
@@ -37,11 +36,19 @@ npm run format  # Prettier で整形
 
 `.env.local` が未設定のときはログインなしのモックとして動作します。
 
-サロン（`/home`・`/detail`）に入れるのは課金ステータスが `active` の会員だけです。未ログインなら登録画面、ログイン済みで未課金なら支払い画面が開きます。決済は未連携のため支払い画面はモックで、支払いを完了する（このブラウザに記録）か「スキップ（モック用）」（このアクセス中のみ）で入れます。決済連携後は `src/constants/billing.ts` の `IS_PAYMENT_MOCK` を `false` にしてスキップを外します。
+サロン（`/home`）に入れるのは課金ステータスが `active` の会員だけです。未ログインなら登録画面、ログイン済みで未課金なら支払い画面が開きます。決済は未連携のため支払い画面はモックで、支払いを完了する（このブラウザに記録）か「スキップ（モック用）」（このアクセス中のみ）で入れます。決済連携後は `src/constants/billing.ts` の `IS_PAYMENT_MOCK` を `false` にしてスキップを外します。
 
 - パスワードは pgcrypto の bcrypt でハッシュ化。セッションは 30 日有効のランダムトークンで、DB には SHA-256 のみ保存
 - 同じメールアドレスで 15 分間に 5 回ログインに失敗するとロック
 - 課金ステータス: `pending`（新規）/ `active` / `past_due`（決済エラー）/ `paused`（休会）/ `canceled`（退会）。変更は `ashitamo.set_subscription_status` に集約し、`subscription_events` に履歴を残す。決済サービスの Webhook からは service_role でこの関数を呼ぶ想定
+
+## チャット・トピックのデータ
+
+画面は `src/lib/chat/repository.ts` の `ChatRepository` インターフェースだけを通してデータを読み書きします。今はメモリ上のモック（`mockRepository.ts`、再読み込みで初期状態に戻る）で、Supabase に移すときは同じインターフェースの実装を作り `src/lib/chat/index.ts` で差し替えます。
+
+- チャンネルのメッセージとトピックのコメントは同じ `Message` 型（`conversationId` にチャンネルかトピックの ID）
+- 返信はスレッドではなく、`replyToId` で元メッセージを引用表示
+- 新着は `subscribeMessages` / `subscribeTopics` で受け取る（Supabase では Realtime に置き換える想定）
 
 ## ディレクトリ構成
 
