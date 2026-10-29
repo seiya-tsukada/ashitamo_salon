@@ -13,7 +13,7 @@ interface ConversationProps {
   header?: React.ReactNode;
 }
 
-// Message list + composer, shared by channels and topics.
+// Message list + composer, shared by the main chat and topics.
 // Render with key={conversationId} so the draft and reply target reset when switching.
 export const Conversation: React.FC<ConversationProps> = ({ conversationId, me, placeholder, emptyLabel, header }) => {
   const { messages, isLoading, send } = useMessages(conversationId, me);

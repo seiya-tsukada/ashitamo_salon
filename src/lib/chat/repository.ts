@@ -1,4 +1,4 @@
-import { Channel, ChatMember, Message, Topic, TopicStatus } from '../../types';
+import { ChatMember, ChatMemberPresence, Message, Topic, TopicStatus } from '../../types';
 
 export interface NewMessageInput {
   conversationId: string;
@@ -15,7 +15,11 @@ export interface NewTopicInput {
 // swapped for a Supabase implementation (RPC + Realtime) without touching components.
 // `author` is passed explicitly for the mock; a server-backed version resolves it from the session.
 export interface ChatRepository {
-  listChannels(): Promise<Channel[]>;
+  listMembers(): Promise<ChatMemberPresence[]>;
+  // Records that the member is active now. With Supabase the session check already does this
+  // (sessions.last_seen_at), so that implementation can be a no-op.
+  touchPresence(member: ChatMember): Promise<void>;
+
   listMessages(conversationId: string): Promise<Message[]>;
   postMessage(input: NewMessageInput, author: ChatMember): Promise<Message>;
   // Called for every new message in the conversation, including the poster's own
