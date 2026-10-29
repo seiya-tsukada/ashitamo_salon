@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
-import { PageType, ProjectItem, CommentItem, MemberItem, MemberStatus, ReportItem } from './types';
-import { INITIAL_PROJECTS, MOCK_MEMBERS, MOCK_REPORTS } from './data/mockData';
-import { DEFAULT_PROJECT_ID, PAGE_PATHS } from './constants/routes';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { ChatMember, PageType, MemberItem, MemberStatus, ReportItem } from './types';
+import { MOCK_MEMBERS, MOCK_REPORTS } from './data/mockData';
+import { PAGE_PATHS } from './constants/routes';
+import { MOCK_CHAT_MEMBER } from './constants/currentUser';
 import { MEMBER_STATUS_TO_SUBSCRIPTION, canEnterSalon } from './constants/billing';
 import { MOCK_SALON_PASS_STORAGE_KEY } from './constants/storage';
 import { useAuth } from './hooks/useAuth';
@@ -11,19 +12,12 @@ import { resolvePageFromLocation } from './utils/routing';
 import { Navbar } from './components/layout/Navbar';
 import { LPView } from './components/lp/LPView';
 import { HomeView } from './components/home/HomeView';
-import { DetailView } from './components/detail/DetailView';
 import { AdminView } from './components/admin/AdminView';
 import { SignupModal } from './components/signup/SignupModal';
 
 export default function App() {
-  // Initial page comes from the URL; /detail is not restored on first load (no project id yet)
-  const [currentPage, setCurrentPage] = useState<PageType>(() => {
-    const page = resolvePageFromLocation();
-    return page === 'detail' ? 'lp' : page;
-  });
+  const [currentPage, setCurrentPage] = useState<PageType>(resolvePageFromLocation);
 
-  const [selectedProjectId, setSelectedProjectId] = useState<string>(DEFAULT_PROJECT_ID);
-  const [projects, setProjects] = useState<ProjectItem[]>(INITIAL_PROJECTS);
   const [members, setMembers] = useState<MemberItem[]>(MOCK_MEMBERS);
   const [reports, setReports] = useState<ReportItem[]>(MOCK_REPORTS);
 
@@ -39,8 +33,14 @@ export default function App() {
     }
   });
   const isSalonOpen = canEnterSalon(subscriptionStatus) || hasMockPass;
-  const isSalonPage = currentPage === 'home' || currentPage === 'detail';
+  const isSalonPage = currentPage === 'home';
   const [signupStep, setSignupStep] = useState<'login' | 'account' | 'payment' | null>(null);
+
+  // Who posts in /home: the logged-in user, or the mock member while Supabase isn't set up
+  const chatMe = useMemo<ChatMember>(
+    () => (auth.user ? { id: auth.user.id, displayName: auth.user.display_name } : MOCK_CHAT_MEMBER),
+    [auth.user],
+  );
 
   // Admins see real members from the DB; everyone else keeps the mock list
   useEffect(() => {
@@ -78,7 +78,7 @@ export default function App() {
   }, []);
 
   const handleNavigate = (page: PageType) => {
-    if ((page === 'home' || page === 'detail') && !isSalonOpen) {
+    if (page === 'home' && !isSalonOpen) {
       openSalonGate();
       return;
     }
@@ -128,35 +128,6 @@ export default function App() {
     await auth.signOut();
   };
 
-  const handleSelectProject = (projectId: string) => {
-    setSelectedProjectId(projectId);
-    setCurrentPage('detail');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    try {
-      window.history.pushState({ page: 'detail', id: projectId }, '', `${PAGE_PATHS.detail}?id=${projectId}`);
-    } catch {
-      // Same as handleNavigate: URL sync is best-effort
-    }
-  };
-
-  const handleAddComment = (projectId: string, newComment: CommentItem) => {
-    setProjects((prev) =>
-      prev.map((proj) => {
-        if (proj.id === projectId) {
-          return {
-            ...proj,
-            comments: [newComment, ...proj.comments],
-          };
-        }
-        return proj;
-      }),
-    );
-  };
-
-  const handleCreateProject = (newProject: ProjectItem) => {
-    setProjects((prev) => [newProject, ...prev]);
-  };
-
   // Both deleting the content and dismissing the report resolve it, removing it from the queue
   const resolveReport = (reportId: string) => {
     setReports((prev) => prev.filter((r) => r.id !== reportId));
@@ -177,9 +148,6 @@ export default function App() {
     }
   };
 
-  // Find currently selected project or fallback to first
-  const currentProject = projects.find((p) => p.id === selectedProjectId) || projects[0];
-
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-stone-800 flex flex-col font-sans selection:bg-amber-200 selection:text-stone-900">
       <Navbar
@@ -194,13 +162,7 @@ export default function App() {
       <main className="flex-1">
         {(currentPage === 'lp' || isGated) && <LPView onNavigate={handleNavigate} onEnterSalon={handleEnterSalon} />}
 
-        {currentPage === 'home' && isSalonOpen && (
-          <HomeView projects={projects} onSelectProject={handleSelectProject} onCreateProject={handleCreateProject} />
-        )}
-
-        {currentPage === 'detail' && isSalonOpen && (
-          <DetailView project={currentProject} onBack={() => handleNavigate('home')} onAddComment={handleAddComment} />
-        )}
+        {currentPage === 'home' && isSalonOpen && <HomeView me={chatMe} />}
 
         {currentPage === 'admin' && (
           <AdminView

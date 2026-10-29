@@ -65,7 +65,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, user, onNavigate, o
             <button
               onClick={onEnterSalon}
               className={`px-2 sm:px-3 py-1 rounded-lg font-medium transition-colors cursor-pointer ${
-                currentPage === 'home' || currentPage === 'detail'
+                currentPage === 'home'
                   ? 'bg-white text-stone-900 font-bold shadow-xs'
                   : 'text-stone-600 hover:text-stone-900'
               }`}
