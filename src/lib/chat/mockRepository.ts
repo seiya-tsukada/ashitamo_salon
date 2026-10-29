@@ -1,10 +1,10 @@
-import { MOCK_CHANNELS, MOCK_MESSAGES, MOCK_TOPICS } from '../../data/mockChat';
+import { MOCK_MEMBERS, MOCK_MESSAGES, MOCK_TOPICS } from '../../data/mockChat';
 import { Message, Topic } from '../../types';
 import { ChatRepository } from './repository';
 
 // In-memory implementation used until the Supabase tables exist. State lives for the page session.
 export const createMockChatRepository = (): ChatRepository => {
-  const channels = structuredClone(MOCK_CHANNELS);
+  const members = structuredClone(MOCK_MEMBERS);
   const messages = structuredClone(MOCK_MESSAGES);
   const topics = structuredClone(MOCK_TOPICS);
   const messageListeners = new Map<string, Set<(message: Message) => void>>();
@@ -21,9 +21,19 @@ export const createMockChatRepository = (): ChatRepository => {
   const notifyTopics = () => topicListeners.forEach((listener) => listener());
 
   return {
-    listChannels: async () => [...channels],
+    listMembers: async () => members.map((m) => ({ ...m })),
 
-    listMessages: async (conversationId) => messages.filter((m) => m.conversationId === conversationId),
+    touchPresence: async (member) => {
+      const lastSeenAt = new Date().toISOString();
+      const existing = members.find((m) => m.id === member.id);
+      if (existing) existing.lastSeenAt = lastSeenAt;
+      else members.push({ ...member, lastSeenAt });
+    },
+
+    listMessages: async (conversationId) =>
+      messages
+        .filter((m) => m.conversationId === conversationId)
+        .sort((a, b) => a.createdAt.localeCompare(b.createdAt)),
 
     postMessage: async ({ conversationId, body, replyToId }, author) => {
       const message: Message = {

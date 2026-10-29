@@ -1,24 +1,28 @@
 import { useCallback, useEffect, useState } from 'react';
 import { chatRepository } from '../lib/chat';
-import { Channel, ChatMember, Message, Topic, TopicStatus } from '../types';
+import { ChatMember, ChatMemberPresence, Message, Topic, TopicStatus } from '../types';
 
-export const useChannels = () => {
-  const [channels, setChannels] = useState<Channel[]>([]);
+// Salon members with their last activity; marks `me` as active first
+export const useMembers = (me: ChatMember) => {
+  const [members, setMembers] = useState<ChatMemberPresence[]>([]);
 
   useEffect(() => {
     let isActive = true;
-    chatRepository.listChannels().then((list) => {
-      if (isActive) setChannels(list);
-    });
+    chatRepository
+      .touchPresence(me)
+      .then(() => chatRepository.listMembers())
+      .then((list) => {
+        if (isActive) setMembers(list);
+      });
     return () => {
       isActive = false;
     };
-  }, []);
+  }, [me]);
 
-  return channels;
+  return members;
 };
 
-// Messages of one channel or topic, kept live through the repository subscription
+// Messages of the main chat or a topic, kept live through the repository subscription
 export const useMessages = (conversationId: string, me: ChatMember) => {
   // Keyed by conversation so switching conversations shows loading instead of the previous list
   const [loaded, setLoaded] = useState<{ conversationId: string; messages: Message[] } | null>(null);

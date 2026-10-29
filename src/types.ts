@@ -31,10 +31,9 @@ export interface ChatMember {
   avatarUrl?: string;
 }
 
-export interface Channel {
-  id: string;
-  name: string;
-  description: string;
+// A member with their last activity, for the online list
+export interface ChatMemberPresence extends ChatMember {
+  lastSeenAt: string | null;
 }
 
 export type TopicStatus = 'open' | 'done';
@@ -51,7 +50,7 @@ export interface Topic {
   commentCount: number;
 }
 
-// Messages in channels and comments on topics share one shape; conversationId is the channel or topic id.
+// Chat messages and comments on topics share one shape; conversationId is MAIN_CHAT_ID or the topic id.
 // Replies quote another message by id (no threads).
 export interface Message {
   id: string;

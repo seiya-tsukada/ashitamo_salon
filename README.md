@@ -3,7 +3,7 @@
 仲間と一緒にプロジェクトを仕掛けるオンラインサロンの MVP フロントエンドです。
 
 - LP（`/`）
-- サロン（`/home`）: チャンネル型のチャットと、タイトル付きで会話できるトピック（未完了 / 完了）
+- サロン（`/home`）: メンバー全員の 1 つのチャット、タイトル付きで会話できるトピック（未完了 / 完了）、オンラインのメンバー表示（12 時間以内に活動した人）
 - 運営管理ダッシュボード（`/admin`）
 
 ログインと課金ステータスは Supabase（Postgres）で管理します。チャットやトピックなどその他のデータはモック（`src/data`）で、実際の決済処理はまだありません。
@@ -46,7 +46,8 @@ npm run format  # Prettier で整形
 
 画面は `src/lib/chat/repository.ts` の `ChatRepository` インターフェースだけを通してデータを読み書きします。今はメモリ上のモック（`mockRepository.ts`、再読み込みで初期状態に戻る）で、Supabase に移すときは同じインターフェースの実装を作り `src/lib/chat/index.ts` で差し替えます。
 
-- チャンネルのメッセージとトピックのコメントは同じ `Message` 型（`conversationId` にチャンネルかトピックの ID）
+- チャットのメッセージとトピックのコメントは同じ `Message` 型（`conversationId` にチャットの `MAIN_CHAT_ID` かトピックの ID）
+- オンライン表示は `lastSeenAt` から判定（`ONLINE_WINDOW_MS`）。Supabase では `ashitamo.sessions.last_seen_at` の最大値を使う想定
 - 返信はスレッドではなく、`replyToId` で元メッセージを引用表示
 - 新着は `subscribeMessages` / `subscribeTopics` で受け取る（Supabase では Realtime に置き換える想定）
 

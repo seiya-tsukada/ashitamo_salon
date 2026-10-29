@@ -1,4 +1,5 @@
-import { Channel, ChatMember, Message, Topic } from '../types';
+import { MAIN_CHAT_ID } from '../constants/chat';
+import { ChatMember, ChatMemberPresence, Message, Topic } from '../types';
 
 const avatar = (photoId: string) => `https://images.unsplash.com/photo-${photoId}?auto=format&fit=crop&w=120&q=80`;
 
@@ -11,19 +12,23 @@ const MEMBERS = {
   kentaro: { id: 'mem-kentaro', displayName: '田中 健太郎', avatarUrl: avatar('1506794778202-cad84cf45f1d') },
   misaki: { id: 'mem-misaki', displayName: '宮崎 美咲', avatarUrl: avatar('1580489944761-15a19d654956') },
   sota: { id: 'mem-sota', displayName: '本郷 蒼太', avatarUrl: avatar('1522075469751-3a6694fb2f61') },
+  yuka: { id: 'mem-yuka', displayName: '小林 由佳' },
 } satisfies Record<string, ChatMember>;
 
-export const MOCK_CHANNELS: Channel[] = [
-  { id: 'ch-general', name: '全体連絡', description: '運営からのお知らせと全体への共有' },
-  { id: 'ch-random', name: '雑談', description: '気軽になんでも' },
-  { id: 'ch-design', name: 'デザイン', description: 'デザインの相談・共有' },
-  { id: 'ch-editorial', name: '編集', description: '雑誌・書籍の編集チーム' },
+// lastSeenAt drives the online lamp (within 12 hours = online)
+export const MOCK_MEMBERS: ChatMemberPresence[] = [
+  { ...MEMBERS.takumi, lastSeenAt: minutesAgo(1) },
+  { ...MEMBERS.rei, lastSeenAt: minutesAgo(20) },
+  { ...MEMBERS.sota, lastSeenAt: minutesAgo(60 * 3) },
+  { ...MEMBERS.misaki, lastSeenAt: minutesAgo(60 * 15) },
+  { ...MEMBERS.kentaro, lastSeenAt: minutesAgo(60 * 50) },
+  { ...MEMBERS.yuka, lastSeenAt: minutesAgo(60 * 24 * 6) },
 ];
 
 export const MOCK_MESSAGES: Message[] = [
   {
     id: 'msg-g1',
-    conversationId: 'ch-general',
+    conversationId: MAIN_CHAT_ID,
     author: MEMBERS.takumi,
     body: '今月の全体ミーティングは第3土曜 14:00〜です。オンライン参加もできます！',
     replyToId: null,
@@ -31,7 +36,7 @@ export const MOCK_MESSAGES: Message[] = [
   },
   {
     id: 'msg-g2',
-    conversationId: 'ch-general',
+    conversationId: MAIN_CHAT_ID,
     author: MEMBERS.misaki,
     body: '了解です。議題の募集はトピックに立てておきますね。',
     replyToId: 'msg-g1',
@@ -39,7 +44,7 @@ export const MOCK_MESSAGES: Message[] = [
   },
   {
     id: 'msg-g3',
-    conversationId: 'ch-general',
+    conversationId: MAIN_CHAT_ID,
     author: MEMBERS.sota,
     body: '新しく参加しました本郷です。プロダクトデザインをやっています。よろしくお願いします！',
     replyToId: null,
@@ -47,15 +52,15 @@ export const MOCK_MESSAGES: Message[] = [
   },
   {
     id: 'msg-g4',
-    conversationId: 'ch-general',
+    conversationId: MAIN_CHAT_ID,
     author: MEMBERS.rei,
-    body: 'ようこそ〜！デザインチャンネルにもぜひ顔を出してください。',
+    body: 'ようこそ〜！デザインの相談もここで気軽にどうぞ。',
     replyToId: 'msg-g3',
     createdAt: minutesAgo(75),
   },
   {
     id: 'msg-r1',
-    conversationId: 'ch-random',
+    conversationId: MAIN_CHAT_ID,
     author: MEMBERS.kentaro,
     body: '週末に行った古本市がとても良かったです。紙の手触りっていいですね。',
     replyToId: null,
@@ -63,7 +68,7 @@ export const MOCK_MESSAGES: Message[] = [
   },
   {
     id: 'msg-r2',
-    conversationId: 'ch-random',
+    conversationId: MAIN_CHAT_ID,
     author: MEMBERS.misaki,
     body: 'どこの古本市ですか？行ってみたい！',
     replyToId: 'msg-r1',
@@ -71,7 +76,7 @@ export const MOCK_MESSAGES: Message[] = [
   },
   {
     id: 'msg-d1',
-    conversationId: 'ch-design',
+    conversationId: MAIN_CHAT_ID,
     author: MEMBERS.rei,
     body: '表紙のラフを3案アップしました。方向性だけでも意見もらえると助かります。',
     replyToId: null,
@@ -79,7 +84,7 @@ export const MOCK_MESSAGES: Message[] = [
   },
   {
     id: 'msg-d2',
-    conversationId: 'ch-design',
+    conversationId: MAIN_CHAT_ID,
     author: MEMBERS.sota,
     body: 'B案のタイポグラフィが好きです。余白をもう少し広げても良さそう。',
     replyToId: 'msg-d1',
@@ -87,7 +92,7 @@ export const MOCK_MESSAGES: Message[] = [
   },
   {
     id: 'msg-e1',
-    conversationId: 'ch-editorial',
+    conversationId: MAIN_CHAT_ID,
     author: MEMBERS.takumi,
     body: '創刊号の台割を共有します。特集は 12〜27 ページの予定です。',
     replyToId: null,
@@ -143,7 +148,7 @@ export const MOCK_TOPICS: Topic[] = [
   {
     id: 'topic-cover',
     title: '創刊号の表紙デザインを決める',
-    body: 'デザインチャンネルに上げた 3 案から 1 つに絞りたいです。理由も添えて意見ください。',
+    body: 'チャットに上げた 3 案から 1 つに絞りたいです。理由も添えて意見ください。',
     author: MEMBERS.rei,
     status: 'open',
     createdAt: minutesAgo(230),
